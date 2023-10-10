@@ -1,0 +1,8 @@
+{
+    "name": "@your-spot/database",
+    "author": "Maksim Sech",
+    "exports": "./src/index.ts",
+    "dependencies": {
+        "mongodb": "^6.1.0"
+    }
+}

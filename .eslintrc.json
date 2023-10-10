@@ -1,0 +1,236 @@
+{
+    "extends": [
+        "next/core-web-vitals",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
+    ],
+    "plugins": [
+        "import-newlines"
+    ],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "rules": {
+        "import/no-unresolved": "off",
+        "@next/next/no-html-link-for-pages": [
+            "error",
+            "apps/web/pages/"
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "ImportDeclaration": 1
+            }
+        ],
+        "no-prototype-builtins": "off",
+        "quotes": [
+            "error",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "jsx-quotes": [
+            "error",
+            "prefer-single"
+        ],
+        "react/jsx-boolean-value": [
+            "error",
+            "never",
+            {
+                "always": []
+            }
+        ],
+        "react/jsx-closing-bracket-location": [
+            "error",
+            "line-aligned"
+        ],
+        "react/jsx-closing-tag-location": "error",
+        "react/jsx-curly-spacing": [
+            "error",
+            "never",
+            {
+                "allowMultiline": true
+            }
+        ],
+        "react/jsx-handler-names": [
+            "off",
+            {
+                "eventHandlerPrefix": "handle",
+                "eventHandlerPropPrefix": "on"
+            }
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "react/jsx-max-props-per-line": [
+            "error",
+            {
+                "maximum": 1,
+                "when": "multiline"
+            }
+        ],
+        "react/jsx-no-duplicate-props": [
+            "error",
+            {
+                "ignoreCase": true
+            }
+        ],
+        "react/jsx-no-undef": "error",
+        "react/jsx-pascal-case": [
+            "error",
+            {
+                "allowAllCaps": true,
+                "ignore": []
+            }
+        ],
+        "react/jsx-uses-vars": "error",
+        "no-unneeded-ternary": [
+            "error",
+            {
+                "defaultAssignment": false
+            }
+        ],
+        "no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": true
+            }
+        ],
+        "no-useless-computed-key": "error",
+        "no-useless-constructor": "error",
+        "no-var": "error",
+        "prefer-const": [
+            "error",
+            {
+                "destructuring": "any",
+                "ignoreReadBeforeAssign": true
+            }
+        ],
+        "prefer-destructuring": [
+            "error",
+            {
+                "VariableDeclarator": {
+                    "array": false,
+                    "object": true
+                },
+                "AssignmentExpression": {
+                    "array": true,
+                    "object": false
+                }
+            },
+            {
+                "enforceForRenamedProperties": false
+            }
+        ],
+        "prefer-numeric-literals": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error",
+        "prefer-template": "error",
+        "require-yield": "error",
+        "rest-spread-spacing": [
+            "error",
+            "never"
+        ],
+        "template-curly-spacing": [
+            "error",
+            "never"
+        ],
+        "object-curly-newline": [
+            "error",
+            {
+                "ImportDeclaration": {
+                    "multiline": true,
+                    "minProperties": 2
+                },
+                "ExportDeclaration": {
+                    "multiline": true,
+                    "minProperties": 2
+                }
+            }
+        ],
+        "import-newlines/enforce": [
+            "error",
+            1
+        ],
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
+        "no-trailing-spaces": "error",
+        "semi": [
+            "error",
+            "never"
+        ],
+        "no-multi-spaces": [
+            "error"
+        ],
+        "no-duplicate-imports": [
+            "error"
+        ],
+        "eol-last": [
+            "error",
+            "always"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "import/first": "error",
+        "import/no-empty-named-blocks": "error",
+        "import/newline-after-import": "error",
+        "import/no-cycle": [
+            "error",
+            {
+                "maxDepth": "∞"
+            }
+        ],
+        "import/order": [
+            "error",
+            {
+                "groups": [
+                    "builtin",
+                    "external",
+                    "internal",
+                    "parent",
+                    "sibling",
+                    "index"
+                ],
+                "pathGroups": [
+                    {
+                        "pattern": "react",
+                        "group": "builtin",
+                        "position": "before"
+                    }
+                ],
+                "pathGroupsExcludedImportTypes": [
+                    "react"
+                ],
+                "distinctGroup": false,
+                "newlines-between": "always",
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                }
+            }
+        ]
+    },
+    "settings": {
+        "import/internal-regex": "^@your-spot/",
+        "import/resolver": {
+            "typescript": {
+                "alwaysTryTypes": true,
+                "project": [
+                    "apps/*/tsconfig.json",
+                    "packages/*/tsconfig.json"
+                ]
+            }
+        }
+    }
+}
