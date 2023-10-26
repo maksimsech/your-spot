@@ -1,19 +1,10 @@
-// TODO: Remove after development
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import {
-    ReactNode,
-    useMemo,
-    useState,
-} from 'react'
+import { ReactNode } from 'react'
 
-import debounce from 'lodash/debounce'
-import throttle from 'lodash/throttle'
 import { useRouter } from 'next/navigation'
 
 import { Map } from ':components/map'
-import { Coordinate } from '@your-spot/contracts'
 
 import { useCurrentLocation } from './use-current-location'
 import { useCurrentSpots } from './use-current-spots'
