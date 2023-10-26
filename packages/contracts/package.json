@@ -1,0 +1,5 @@
+{
+    "name": "@your-spot/contracts",
+    "author": "Maksim Sech",
+    "exports": "./src/index.ts"
+}

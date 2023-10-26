@@ -1,0 +1,8 @@
+{
+    "name": "@your-spot/map-types",
+    "exports": "./src/index.ts",
+    "author": "Maksim Sech",
+    "devDependencies": {
+        "@your-spot/contracts": "*"
+    }
+}
