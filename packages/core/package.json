@@ -1,0 +1,14 @@
+{
+    "name": "@your-spot/core",
+    "author": "Maksim Sech",
+    "exports": {
+        ".": "./src/index.ts",
+        "./services": "./src/services/index.ts"
+    },
+    "dependencies": {
+        "@your-spot/database": "*"
+    },
+    "devDependencies": {
+        "@your-spot/contracts": "*"
+    }
+}

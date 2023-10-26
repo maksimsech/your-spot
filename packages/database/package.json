@@ -1,8 +1,17 @@
 {
     "name": "@your-spot/database",
     "author": "Maksim Sech",
-    "exports": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./types": "./src/types/index.ts"
+    },
     "dependencies": {
         "mongodb": "^6.1.0"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.1"
+    },
+    "scripts": {
+        "init-db": "dotenv -e ../../.env -c -- ts-node src/init.ts"
     }
 }
