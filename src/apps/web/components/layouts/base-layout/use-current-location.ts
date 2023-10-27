@@ -3,7 +3,7 @@ import {
     useEffect,
 } from 'react'
 
-import { Coordinate } from '../../../../../packages/contracts/src'
+import type { Coordinate } from '@your-spot/contracts'
 
 
 type CurrentLocationState = Coordinate | 'loading'
