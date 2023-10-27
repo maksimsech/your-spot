@@ -10,7 +10,7 @@ import {
     useSearchParams,
 } from 'next/navigation'
 
-import { createSpot } from ':actions/spots'
+import { createSpot } from '@/actions/spots'
 
 import './spot-form.scss'
 

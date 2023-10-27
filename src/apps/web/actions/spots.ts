@@ -3,7 +3,7 @@
 import type {
     Bounds,
     Spot,
-} from '../../../packages/contracts/src'
+} from '@your-spot/contracts'
 import {
     createSpot as createSpotCore,
     getSpotsWithinBounds as getSpotsWithinBoundsCore,

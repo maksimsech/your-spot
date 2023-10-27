@@ -206,13 +206,18 @@
                     "external",
                     "internal",
                     "parent",
-                    "index",
-                    "sibling"
+                    "sibling",
+                    "index"
                 ],
                 "pathGroups": [
                     {
                         "pattern": "react",
                         "group": "builtin",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@/**",
+                        "group": "parent",
                         "position": "before"
                     }
                 ],

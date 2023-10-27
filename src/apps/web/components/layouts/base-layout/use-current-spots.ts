@@ -5,11 +5,12 @@ import {
 
 import debounce from 'lodash/debounce'
 
-import {getSpotsWithinBounds} from ':actions/spots'
 import type {
     Spot,
     Bounds,
-} from '../../../../../packages/contracts/src'
+} from '@your-spot/contracts'
+
+import { getSpotsWithinBounds } from '@/actions/spots'
 
 
 interface UseCurrentSpotsResult {

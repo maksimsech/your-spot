@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { getSpot } from '@your-spot/core'
 
-import { SpotInfo } from ':components/spots/info'
+import { SpotInfo } from '@/components/spots/info'
 
 
 interface PageProps {

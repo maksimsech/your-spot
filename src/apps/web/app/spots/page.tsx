@@ -1,4 +1,4 @@
-import { SpotForm } from ':components/spots/form'
+import { SpotForm } from '@/components/spots/form'
 
 
 export default function Page() {
