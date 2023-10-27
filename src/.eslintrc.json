@@ -206,8 +206,8 @@
                     "external",
                     "internal",
                     "parent",
-                    "sibling",
-                    "index"
+                    "index",
+                    "sibling"
                 ],
                 "pathGroups": [
                     {

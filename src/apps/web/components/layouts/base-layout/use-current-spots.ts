@@ -9,7 +9,7 @@ import {getSpotsWithinBounds} from ':actions/spots'
 import type {
     Spot,
     Bounds,
-} from '@your-spot/contracts'
+} from '../../../../../packages/contracts/src'
 
 
 interface UseCurrentSpotsResult {
