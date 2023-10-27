@@ -1,4 +1,4 @@
-import { Spot } from '@your-spot/contracts'
+import { Spot } from '../../../../../packages/contracts/src'
 
 import './spot-info.scss'
 

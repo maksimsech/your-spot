@@ -4,10 +4,10 @@ import { ReactNode } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Map } from ':components/map'
-
 import { useCurrentLocation } from './use-current-location'
 import { useCurrentSpots } from './use-current-spots'
+
+import { Map } from ':components/map'
 
 import './base-layout.scss'
 
