@@ -3,7 +3,8 @@
         "next/core-web-vitals",
         "plugin:import/recommended",
         "plugin:import/typescript",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:tailwindcss/recommended"
     ],
     "plugins": [
         "import-newlines",
@@ -230,6 +231,15 @@
                     "order": "asc",
                     "caseInsensitive": true
                 }
+            }
+        ],
+        "tailwindcss/no-custom-classname": [
+            "warn",
+            {
+                "whitelist": [
+                    "bg\\-background\\/\\d{1,3}",
+                    "bg\\-background"
+                ]
             }
         ]
     },

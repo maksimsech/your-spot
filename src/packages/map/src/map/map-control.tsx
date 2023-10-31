@@ -1,6 +1,7 @@
 import {
     useEffect,
     useCallback,
+    useRef,
 } from 'react'
 
 import { LatLng } from 'leaflet'
@@ -28,10 +29,35 @@ export function MapControl({
     onCoordinateClicked,
     onCurrentBoundsUpdated,
 }: MapControlProps) {
+    const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
+    const latestDoubleClickTimeStamp = useRef<number | null>(null)
+
     const map = useMapEvents({
         click(e) {
-            onCoordinateClicked(toCoordinate(e.latlng))
+            const { detail, timeStamp } = e.originalEvent
+
+            if (detail > 1) {
+                clearTimeout(timeoutRef.current)
+                return
+            }
+
+            const doubleClickTimeStamp = latestDoubleClickTimeStamp.current
+            // TODO: Looks like bug in leaflet. Investigate later
+            if (doubleClickTimeStamp !== null && timeStamp - doubleClickTimeStamp < 45) {
+                return
+            }
+
+            if (detail === 1) {
+                timeoutRef.current = setTimeout(
+                    () => onCoordinateClicked(toCoordinate(e.latlng)),
+                    200,
+                )
+            }
         },
+        dblclick(e) {
+            latestDoubleClickTimeStamp.current = e.originalEvent.timeStamp
+        },
+        // TODO: Add animation on preclick
     })
 
     const onMove = useCallback(

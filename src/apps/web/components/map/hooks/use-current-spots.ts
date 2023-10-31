@@ -1,5 +1,7 @@
 import {
+    useCallback,
     useMemo,
+    useRef,
     useState,
 } from 'react'
 
@@ -16,14 +18,19 @@ import { getSpotsWithinBounds } from '@/actions/spots'
 interface UseCurrentSpotsResult {
     spots: ReadonlyArray<Spot>
     onBoundsUpdated: (bounds: Bounds) => void
+    refresh: () => void
 }
 
+// TODO: Refactor
 export function useCurrentSpots(): UseCurrentSpotsResult {
     const [spots, setSpots] = useState<Spot[]>([])
+    const latestBounds = useRef<Bounds | null>(null)
+
     const onBoundsUpdated = useMemo(
         () => debounce(
             async (bounds: Bounds) => {
-                // TODO: Refactor
+                latestBounds.current = bounds
+
                 const newSpots = await getSpotsWithinBounds(bounds)
                 setSpots(newSpots)
             },
@@ -32,8 +39,14 @@ export function useCurrentSpots(): UseCurrentSpotsResult {
         [],
     )
 
+    const refresh = useCallback(
+        () => latestBounds.current && onBoundsUpdated(latestBounds.current),
+        [onBoundsUpdated],
+    )
+
     return {
         spots,
         onBoundsUpdated,
+        refresh,
     }
 }
