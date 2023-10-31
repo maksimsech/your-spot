@@ -1,6 +1,6 @@
 import { Spot } from '@your-spot/contracts'
 
-import './spot-info.scss'
+import { Separator } from '@/components/ui/separator'
 
 
 interface SpotInfoProps {
@@ -9,13 +9,14 @@ interface SpotInfoProps {
 
 export function SpotInfo({ spot }: SpotInfoProps) {
     return (
-        <div>
-            <section>
+        <div className='flex flex-col gap-6'>
+            <h2 className='self-center'>
                 {spot.title}
-            </section>
-            <section>
+            </h2>
+            <Separator />
+            <div className='mx-6'>
                 {spot.description}
-            </section>
+            </div>
         </div>
     )
 }

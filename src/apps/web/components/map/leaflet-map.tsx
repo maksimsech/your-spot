@@ -4,9 +4,11 @@ import dynamic from 'next/dynamic'
 
 import { MapProps } from '@your-spot/map-types'
 
+import { MapLoader } from './map-loader'
+
 
 const Map = dynamic<MapProps>(() => import('@your-spot/map').then(m => m.Map), {
-    loading: () => <p>Loading...</p>, // TODO: Add loading component or skeleton
+    loading: () => <MapLoader />,
     ssr: false,
 })
 

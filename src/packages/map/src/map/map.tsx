@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { icon } from 'leaflet'
 import {
     MapContainer,
@@ -11,7 +10,7 @@ import type { MapProps } from '@your-spot/map-types'
 
 import { MapControl } from './map-control'
 
-import './map.scss'
+import './map.css'
 
 
 export function Map({
@@ -27,7 +26,7 @@ export function Map({
         <MapContainer
             center={startingPoint}
             zoom={10}
-            className={classNames(className, 'ys-map')}
+            className={className}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
