@@ -1,14 +1,16 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    useRouter,
-    useSearchParams,
-} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-import { createSpot } from '@/actions/spots'
+import { Spot } from '@your-spot/contracts'
+
+import {
+    createSpot,
+    updateSpot,
+} from '@/actions/spots'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -21,6 +23,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/components/ui/toast'
 
 
 const formSchema = z.object({
@@ -29,50 +32,74 @@ const formSchema = z.object({
         .min(5, {
             message: 'Title must be at least 5 characters.',
         })
-        .max(15, {
-            message: 'Maximum length of title is 15 characters.',
+        .max(30, {
+            message: 'Maximum length of title is 30 characters.',
         }),
     description: z
         .string()
-        .max(40, {
-            message: 'Maximum length of description is 40 characters.',
+        .max(100, {
+            message: 'Maximum length of description is 100 characters.',
         }),
 })
 
-export function SpotForm() {
+interface SpotFormProps {
+    spot?: Spot
+    lat?: number
+    lng?: number
+}
+
+export function SpotForm({
+    spot,
+    lat,
+    lng,
+}: SpotFormProps) {
     const router = useRouter()
-    const searchParams = useSearchParams()
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: '',
-            description: '',
+            title: spot?.title ?? '',
+            description: spot?.description ?? '',
         },
     })
 
-    const lat = searchParams.get('lat') != null ? parseFloat(searchParams.get('lat')!) : null
-    const lng = searchParams.get('lng') != null ? parseFloat(searchParams.get('lng')!) : null
-    if (lat == null || lng == null) {
-        router.back()
-    }
-
     async function handleFormSubmit(values: z.infer<typeof formSchema>) {
-        await createSpot({
-            title: values.title,
-            description: values.description,
-            coordinate: {
-                lat: lat!,
-                lng: lng!,
-            },
-        })
+        if (spot) {
+            // TODO: Revisit this call. Imho doesn't look good.
+            await updateSpot({
+                ...spot,
+                title: values.title,
+                description: values.description,
+            })
 
-        router.push('/?action=refresh') // TODO: Reload current spots
+            toast({
+                title: `${values.title} got updated!`,
+            })
+        } else {
+            await createSpot({
+                title: values.title,
+                description: values.description,
+                coordinate: {
+                    lat: lat!,
+                    lng: lng!,
+                },
+            })
+
+            toast({
+                title: `${values.title} created!`,
+                description: 'Thanks for new place. :)',
+            })
+        }
+
+        router.push('/?action=refresh')
     }
+
+    const title = spot ? 'Edit spot' : 'New spot'
 
     return (
         <div className='flex flex-col gap-y-6'>
-            <h2>New spot</h2>
+            <h2>{title}</h2>
             <Form {...form}>
                 <form
                     className='space-y-4'

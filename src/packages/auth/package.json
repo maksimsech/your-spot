@@ -1,0 +1,17 @@
+{
+    "name": "@your-spot/auth",
+    "author": "Maksim Sech",
+    "exports": {
+        ".": "./src/index.ts",
+        "./base-config": "./src/base-config.ts"
+    },
+    "dependencies": {
+        "@auth/core": "^0.18.0",
+        "@auth/mongodb-adapter": "^2.0.3",
+        "@your-spot/database": "*",
+        "next-auth": "^5.0.0-beta.3"
+    },
+    "devDependencies": {
+        "@your-spot/contracts": "*"
+    }
+}

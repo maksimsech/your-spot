@@ -1,5 +1,6 @@
 import { SymbolIcon } from '@radix-ui/react-icons'
 
+
 export function Loader() {
     return (
         <div className='flex gap-2'>

@@ -1,8 +1,8 @@
-import { clsx } from 'clsx'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { ThemeProvider } from '@/components/providers/theme'
+import { Toaster } from '@/components/ui/toast'
 import { LayoutProps } from '@/types/layout-props'
 
 import './globals.css'
@@ -21,14 +21,17 @@ export default function RootLayout({ children }: LayoutProps) {
             lang='en'
             suppressHydrationWarning
         >
-            <body className={clsx(inter.className, 'flex h-[100vh] flex-col')}>
+            <body className={inter.className}>
                 <ThemeProvider
                     attribute='class'
                     defaultTheme='system'
                     enableSystem
                     disableTransitionOnChange
                 >
-                    {children}
+                    <div className='flex h-screen flex-col'>
+                        {children}
+                    </div>
+                    <Toaster />
                 </ThemeProvider>
             </body>
         </html>
