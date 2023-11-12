@@ -20,7 +20,7 @@ import { DeleteDialog } from './delete-dialog'
 
 interface SpotInfoProps {
     spot: Spot
-    spotAuthor?: User | null
+    spotAuthor: User | null
 }
 
 export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {

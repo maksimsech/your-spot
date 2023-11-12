@@ -24,11 +24,11 @@ export function Logo({
 
     const logoClass = logoDark
         ? 'dark:hidden'
-        : undefined
+        : null
 
     const logoDarkClass = logo
         ? 'hidden dark:visible'
-        : undefined
+        : null
 
     return (
         <>

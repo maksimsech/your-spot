@@ -17,7 +17,7 @@ const providerAccountLinkMap: Record<Provider, (account: Account) => string | un
 
 export function getLogo(logo: string | undefined) {
     if (!logo) {
-        return logo
+        return null
     }
 
     if (logo.startsWith('/')) {
