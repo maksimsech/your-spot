@@ -26,7 +26,7 @@ export default async function Page({
 
     const author = spot.authorId
         ? await getUser(spot.authorId)
-        : undefined
+        : null
 
     return (
         <SpotInfo

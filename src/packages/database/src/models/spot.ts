@@ -7,5 +7,5 @@ export interface Spot {
     description: string
     image?: string
     coordinate: Coordinate
-    authorId?: ObjectId
+    authorId: ObjectId | null
 }

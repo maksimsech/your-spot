@@ -20,10 +20,10 @@ import {
 } from './objectid-service'
 
 
-export function createSpot(spot: Omit<Spot, 'id'>, authorUserId: string | undefined = undefined) {
+export function createSpot(spot: Omit<Spot, 'id'>, authorUserId: string | null = null) {
     const authorUserObjectId = authorUserId
         ? stringToObjectId(authorUserId)
-        : undefined
+        : null
 
     const dbSpot = {
         ...spot,
@@ -118,7 +118,7 @@ export async function getSpotsWithinBounds(bounds: Bounds): Promise<Spot[]> {
 function createSpotFromDbSpot(spot: WithId<DbSpot>): Spot {
     const authorId = spot.authorId
         ? objectIdToString(spot.authorId)
-        : undefined
+        : null
 
     return {
         ...toWithStringId(spot),

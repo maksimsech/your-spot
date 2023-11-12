@@ -16,14 +16,14 @@ export interface Spot {
     description: string
     image?: string
     coordinate: Coordinate
-    authorId?: string
+    authorId: string | null
 }
 
 export interface User {
     id: string
     name: string
-    email?: string
-    image?: string
+    email: string | null
+    image: string | null
 }
 
 export type Provider = 'google' | 'osu'
