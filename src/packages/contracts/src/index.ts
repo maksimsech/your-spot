@@ -16,4 +16,21 @@ export interface Spot {
     description: string
     image?: string
     coordinate: Coordinate
+    authorId?: string
+}
+
+export interface User {
+    id: string
+    name: string
+    email?: string
+    image?: string
+}
+
+export type Provider = 'google' | 'osu'
+
+export interface Account {
+    id: string
+    provider: Provider
+    providerAccountId: string
+    userId: string
 }

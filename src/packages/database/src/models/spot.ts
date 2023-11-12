@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import { Coordinate } from 'types'
 
 
@@ -6,4 +7,5 @@ export interface Spot {
     description: string
     image?: string
     coordinate: Coordinate
+    authorId?: ObjectId
 }

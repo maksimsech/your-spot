@@ -29,7 +29,7 @@ export function MapControl({
     onCoordinateClicked,
     onCurrentBoundsUpdated,
 }: MapControlProps) {
-    const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
     const latestDoubleClickTimeStamp = useRef<number | null>(null)
 
     const map = useMapEvents({

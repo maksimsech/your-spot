@@ -14,18 +14,47 @@ import {
     createMongoCoordinate,
 } from './coordinate-service'
 import {
+    objectIdToString,
     stringToObjectId,
     toWithStringId,
 } from './objectid-service'
 
 
-export function createSpot(spot: Omit<Spot, 'id'>) {
+export function createSpot(spot: Omit<Spot, 'id'>, authorUserId: string | undefined = undefined) {
+    const authorUserObjectId = authorUserId
+        ? stringToObjectId(authorUserId)
+        : undefined
+
     const dbSpot = {
         ...spot,
         coordinate: createMongoCoordinate(spot.coordinate),
+        authorId: authorUserObjectId,
     }
 
     return spotCollection.insertOne(dbSpot)
+}
+
+export async function deleteSpot(spotId: string) {
+    const objectId = stringToObjectId(spotId)
+
+    await spotCollection.deleteOne({
+        _id: objectId,
+    })
+}
+
+export async function updateSpot(spot: Spot) {
+    const objectId = stringToObjectId(spot.id)
+
+    await spotCollection.updateOne({
+        _id: objectId,
+    }, {
+        $set: {
+            title: spot.title,
+            description: spot.description,
+        },
+    }, {
+        upsert: false,
+    })
 }
 
 export async function getSpot(spotId: string) {
@@ -54,6 +83,21 @@ export async function getAllSpots() {
     return dbSpots.map(createSpotFromDbSpot)
 }
 
+export async function getSpotsForAuthor(authorId: string) {
+    let authorObjectId = null
+    try {
+        authorObjectId = stringToObjectId(authorId)
+    }
+    catch
+    {
+        return []
+    }
+
+    const dbSpots = await spotCollection.find({ authorId: authorObjectId }).toArray()
+
+    return dbSpots.map(createSpotFromDbSpot)
+}
+
 export async function getSpotsWithinBounds(bounds: Bounds): Promise<Spot[]> {
     const dbSpots = await spotCollection
         .find({
@@ -72,9 +116,14 @@ export async function getSpotsWithinBounds(bounds: Bounds): Promise<Spot[]> {
 }
 
 function createSpotFromDbSpot(spot: WithId<DbSpot>): Spot {
+    const authorId = spot.authorId
+        ? objectIdToString(spot.authorId)
+        : undefined
+
     return {
         ...toWithStringId(spot),
         coordinate: createContractCoordinate(spot.coordinate),
+        authorId,
     }
 }
 

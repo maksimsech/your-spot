@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverActions: true,
-    },
     transpilePackages: [
+        '@your-spot/auth',
         '@your-spot/database',
         '@your-spot/core',
         '@your-spot/map',

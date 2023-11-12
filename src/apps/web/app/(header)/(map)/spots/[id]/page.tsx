@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation'
 
-import { getSpot } from '@your-spot/core'
+import {
+    getSpot,
+    getUser,
+} from '@your-spot/core'
 
 import { SpotInfo } from '@/components/spots/info'
 
@@ -21,9 +24,14 @@ export default async function Page({
         notFound()
     }
 
+    const author = spot.authorId
+        ? await getUser(spot.authorId)
+        : undefined
+
     return (
         <SpotInfo
             spot={spot}
+            spotAuthor={author}
         />
     )
 }
