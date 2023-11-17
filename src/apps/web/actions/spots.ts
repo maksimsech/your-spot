@@ -12,7 +12,6 @@ import {
     getSpotsWithinBounds as getSpotsWithinBoundsCore,
 } from '@your-spot/core/services'
 
-import { auth } from '@/auth'
 import { getAuthorizedUser } from '@/auth/helper'
 import {
     canDeleteSpot,
@@ -20,13 +19,18 @@ import {
 } from '@/auth/rules/spots'
 
 
-export async function createSpot(spot: Omit<Spot, 'id'>) {
-    const session = await auth()
-    if (!session?.user) {
+export async function createSpot(spot: Omit<Spot, 'id' | 'authorId'>) {
+    const user = await getAuthorizedUser()
+    if (!user) {
         throw Error('Not authenticated')
     }
 
-    await createSpotCore(spot, session.user.id)
+    const spotWithAuthorId = {
+        ...spot,
+        authorId: user.id,
+    }
+
+    await createSpotCore(spotWithAuthorId)
 }
 
 export async function updateSpot(spot: Spot) {

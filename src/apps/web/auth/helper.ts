@@ -1,10 +1,7 @@
-import { cache } from 'react'
-
 import {
     Account,
     Provider,
 } from '@your-spot/contracts'
-import { getUser } from '@your-spot/core'
 
 import { auth } from './index'
 
@@ -38,14 +35,8 @@ export function getAccountUrl(account: Account) {
     return providerAccountLinkMap[account.provider](account)
 }
 
-// TODO: Instead of going each time to db create new model and write it to session
-async function getAuthorizedUserCore() {
+export async function getAuthorizedUser() {
     const session = await auth()
-    if (!session?.user) {
-        return null
-    }
 
-    return await getUser(session.user.id)
+    return session?.user
 }
-
-export const getAuthorizedUser = cache(getAuthorizedUserCore)

@@ -1,13 +1,11 @@
-import {
-    Spot,
-    User,
-} from '@your-spot/contracts'
+import type { AuthUser } from '@your-spot/auth'
+import type { Spot } from '@your-spot/contracts'
 
 
-export function canEditSpot(spot: Spot, user: User) {
+export function canEditSpot(spot: Spot, user: AuthUser) {
     return spot.authorId === user.id
 }
 
-export function canDeleteSpot(spot: Spot, user: User) {
+export function canDeleteSpot(spot: Spot, user: AuthUser) {
     return spot.authorId === user.id
 }
