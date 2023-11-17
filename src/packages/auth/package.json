@@ -3,7 +3,8 @@
     "author": "Maksim Sech",
     "exports": {
         ".": "./src/index.ts",
-        "./base-config": "./src/base-config.ts"
+        "./base-config": "./src/base-config.ts",
+        "./types": "./src/types.ts"
     },
     "dependencies": {
         "@auth/core": "^0.18.0",

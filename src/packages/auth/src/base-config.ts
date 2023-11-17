@@ -9,11 +9,13 @@ export const baseConfig = {
         strategy: 'jwt',
     },
     callbacks: {
-        jwt: ({ token, user }) => {
-            if (user) {
-                token.email = user.email
-                token.sub = user.id
-                token.name = user.name
+        jwt: ({ token, user, trigger }) => {
+            if (trigger === 'signIn' || trigger === 'signUp') {
+                if (user) {
+                    token.email = user.email
+                    token.sub = user.id
+                    token.name = user.name
+                }
             }
 
             return token

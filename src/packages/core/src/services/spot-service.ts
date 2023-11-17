@@ -20,15 +20,15 @@ import {
 } from './objectid-service'
 
 
-export function createSpot(spot: Omit<Spot, 'id'>, authorUserId: string | null = null) {
-    const authorUserObjectId = authorUserId
-        ? stringToObjectId(authorUserId)
+export function createSpot(spot: Omit<Spot, 'id'>) {
+    const authorObjectId = spot.authorId
+        ? stringToObjectId(spot.authorId)
         : null
 
     const dbSpot = {
         ...spot,
         coordinate: createMongoCoordinate(spot.coordinate),
-        authorId: authorUserObjectId,
+        authorId: authorObjectId,
     }
 
     return spotCollection.insertOne(dbSpot)
