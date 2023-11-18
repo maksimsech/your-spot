@@ -1,7 +1,7 @@
 import { GlobeIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 
-import { auth } from '@/auth'
+import { getAuthorizedUser } from '@/auth/helper'
 import { cn } from '@/utils'
 import { ThemeModeToggle } from '../theme-toggle'
 
@@ -13,9 +13,9 @@ interface HeaderProps {
 }
 
 export async function Header({ className }: HeaderProps) {
-    const session = await auth()
+    const user = await getAuthorizedUser()
 
-    const isLoggedIn = !!session?.user
+    const isLoggedIn = !!user
 
     return (
         <header className={cn('flex w-full flex-none items-center justify-between p-2 shadow-inner border-b dark:border-b-slate-300 border-b-slate-700', className)}>
@@ -34,7 +34,7 @@ export async function Header({ className }: HeaderProps) {
                         Sign in
                     </Link>
                 )}
-                {isLoggedIn && <Profile user={session.user!} />}
+                {isLoggedIn && <Profile user={user} />}
                 <ThemeModeToggle />
             </div>
         </header>
