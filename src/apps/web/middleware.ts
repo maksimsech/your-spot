@@ -1,4 +1,7 @@
-import { NextResponse } from 'next/server'
+import {
+    type NextRequest,
+    NextResponse,
+} from 'next/server'
 
 import {
     auth,
@@ -6,9 +9,18 @@ import {
 } from './auth/middelware'
 
 
+const ignoredAuthPages = [
+    '/api/auth/signin',
+    '/api/auth/signout',
+    '/api/auth/error',
+    '/api/auth/verify-request',
+    '/api/auth/new-user',
+]
+
 export const config = {
     matcher: [
-        '/((?!api|_next/static|_next/image|favicon.ico|icons).*)',
+        '/((?!_next/static|_next/image|favicon.ico|icons).*)',
+        '/api/auth/:path*',
         '/auth/:path*',
         '/spots',
         '/profile',
@@ -16,7 +28,18 @@ export const config = {
     ],
 }
 
-export default async function middleware(request: Request) {
+export default async function middleware(request: NextRequest) {
+    if (request.url.includes('/api')) {
+        if (request.method === 'GET' && ignoredAuthPages.some(p => request.url.includes(p))) {
+            const url = request.nextUrl.clone()
+
+            url.pathname = '/404'
+            return NextResponse.rewrite(url)
+        }
+
+        return NextResponse.next()
+    }
+
     const session = await auth()
     if (!validateRoute(session, request)) {
         return NextResponse.redirect(new URL('/', request.url))

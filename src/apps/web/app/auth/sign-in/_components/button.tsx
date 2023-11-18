@@ -5,23 +5,23 @@ import { ReactNode } from 'react'
 
 import { signIn } from 'next-auth/react'
 
-import { Button } from '@/components/ui/button'
+import { Button as UiButton } from '@/components/ui/button'
 
 
-interface SignInButtonProps {
+interface ButtonProps {
     id: string
     name: string
     children: ReactNode
 }
 
-export function SignInButton({
+export function Button({
     id,
     name,
     children,
-} : SignInButtonProps) {
+} : ButtonProps) {
 
     return (
-        <Button
+        <UiButton
             className='flex gap-2'
             variant='outline'
             onClick={() => signIn(id)}
@@ -30,6 +30,6 @@ export function SignInButton({
             <span>
                 {name}
             </span>
-        </Button>
+        </UiButton>
     )
 }
