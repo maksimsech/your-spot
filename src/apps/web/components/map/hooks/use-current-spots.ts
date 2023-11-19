@@ -25,14 +25,20 @@ interface UseCurrentSpotsResult {
 export function useCurrentSpots(): UseCurrentSpotsResult {
     const [spots, setSpots] = useState<Spot[]>([])
     const latestBounds = useRef<Bounds | null>(null)
+    const latestUpdateTimestamp = useRef<number | null>(null)
 
     const onBoundsUpdated = useMemo(
         () => debounce(
             async (bounds: Bounds) => {
                 latestBounds.current = bounds
 
+                const updateTimestamp = Date.now()
+                latestUpdateTimestamp.current = updateTimestamp
+
                 const newSpots = await getSpotsWithinBounds(bounds)
-                setSpots(newSpots)
+                if (updateTimestamp === latestUpdateTimestamp.current) {
+                    setSpots(newSpots)
+                }
             },
             100,
         ),
