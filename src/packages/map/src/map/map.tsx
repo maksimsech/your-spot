@@ -15,17 +15,18 @@ import './map.css'
 
 export function Map({
     className,
-    startingPoint,
+    center,
+    zoom,
     spots,
     markerIconUrl,
     onCoordinateClicked,
-    onCurrentBoundsUpdated,
+    onCurrentLocationUpdated,
     onSpotClicked,
 }: MapProps) {
     return (
         <MapContainer
-            center={startingPoint}
-            zoom={10}
+            center={center}
+            zoom={zoom}
             className={className}
         >
             <TileLayer
@@ -50,7 +51,7 @@ export function Map({
             ))}
             <MapControl
                 onCoordinateClicked={onCoordinateClicked}
-                onCurrentBoundsUpdated={onCurrentBoundsUpdated}
+                onCurrentLocationUpdated={onCurrentLocationUpdated}
             />
         </MapContainer>
     )

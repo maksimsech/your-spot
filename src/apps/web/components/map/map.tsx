@@ -1,56 +1,52 @@
 'use client'
 
-import { useEffect } from 'react'
-
-import {
-    useRouter,
-    useSearchParams,
-} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import {
     useCurrentLocation,
     useCurrentSpots,
+    useMapActions,
 } from './hooks'
 import { Map as LeafletMap } from './leaflet-map'
 import { MapLoader } from './map-loader'
 
 
-const warsawLocation = {
-    lat: 52.237049,
-    lng: 21.017532,
-}
-
 export function Map() {
     const router = useRouter()
-    const searchParams = useSearchParams()
 
-    const location = useCurrentLocation(warsawLocation)
+    const useCurrentLocationResult = useCurrentLocation()
     const {
         spots,
         onBoundsUpdated,
         refresh,
     } = useCurrentSpots()
 
-    const action = searchParams.get('action')
-    useEffect(() => {
-        if (action === 'refresh') {
-            refresh()
-            router.replace('/', { scroll: false })
-        }
-    }, [action, refresh, router])
+    useMapActions({
+        refreshSpots: refresh,
+    })
 
-    if (location === 'loading') {
+    if (useCurrentLocationResult.isLoading) {
         return <MapLoader />
     }
+
+    const {
+        location,
+        zoom,
+        onLocationUpdated,
+    } = useCurrentLocationResult
 
     return (
         <div className='h-full w-full p-1'>
             <LeafletMap
                 className='h-full w-full rounded-xl shadow-md'
-                startingPoint={location}
+                center={location}
+                zoom={zoom}
                 spots={spots}
                 markerIconUrl='/icons/pin.svg'
-                onCurrentBoundsUpdated={onBoundsUpdated}
+                onCurrentLocationUpdated={(center, zoom, bounds) => {
+                    onLocationUpdated(center, zoom)
+                    onBoundsUpdated(bounds)
+                }}
                 onCoordinateClicked={({ lat, lng }) => {
                     router.push(`/spots?lat=${lat}&lng=${lng}`)
                 }}

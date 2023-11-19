@@ -7,10 +7,8 @@ import {
 import { LatLng } from 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 
-import type {
-    Coordinate,
-    Bounds,
-} from '@your-spot/contracts'
+import type { Coordinate } from '@your-spot/contracts'
+import type { MapProps } from '@your-spot/map-types'
 
 
 function toCoordinate(latlng: LatLng): Coordinate {
@@ -22,12 +20,12 @@ function toCoordinate(latlng: LatLng): Coordinate {
 
 interface MapControlProps {
     onCoordinateClicked: (coordinate: Coordinate) => void
-    onCurrentBoundsUpdated: (bounds: Bounds) => void
+    onCurrentLocationUpdated?: MapProps['onCurrentLocationUpdated']
 }
 
 export function MapControl({
     onCoordinateClicked,
-    onCurrentBoundsUpdated,
+    onCurrentLocationUpdated,
 }: MapControlProps) {
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
     const latestDoubleClickTimeStamp = useRef<number | null>(null)
@@ -62,16 +60,22 @@ export function MapControl({
 
     const onMove = useCallback(
         () => {
-            const bounds = map.getBounds()
+            if (onCurrentLocationUpdated) {
+                const mapCenter = map.getCenter()
+                const mapZoom = map.getZoom()
+                const mapBounds = map.getBounds()
 
-            onCurrentBoundsUpdated({
-                southWest: toCoordinate(bounds.getSouthWest()),
-                northEast: toCoordinate(bounds.getNorthEast()),
-                northWest: toCoordinate(bounds.getNorthWest()),
-                southEast: toCoordinate(bounds.getSouthEast()),
-            })
+                const center = toCoordinate(mapCenter)
+                const bounds = {
+                    southWest: toCoordinate(mapBounds.getSouthWest()),
+                    northEast: toCoordinate(mapBounds.getNorthEast()),
+                    northWest: toCoordinate(mapBounds.getNorthWest()),
+                    southEast: toCoordinate(mapBounds.getSouthEast()),
+                }
+                onCurrentLocationUpdated(center, mapZoom, bounds)
+            }
         },
-        [map, onCurrentBoundsUpdated],
+        [map, onCurrentLocationUpdated],
     )
 
     useEffect(() => {
