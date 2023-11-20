@@ -1,39 +1,49 @@
 'use client'
 
-import { useCallback } from 'react'
+import {
+    useCallback,
+    useState,
+} from 'react'
 
 import { useRouter } from 'next/navigation'
 
 import type {
     Bounds,
     Coordinate,
+    Spot,
 } from '@your-spot/contracts'
+import type { MapRef } from '@your-spot/map-types'
 
 import {
     useCurrentLocation,
     useCurrentSpots,
-    useMapActions,
+    useNavigateAction,
+    useRefreshAction,
 } from './hooks'
-import { Map as LeafletMap } from './leaflet-map'
-import { MapLoader } from './map-loader'
+import {
+    Map as LeafletMap,
+    MapLoader,
+} from './leaflet-map'
 
 
 export function Map() {
     const router = useRouter()
 
-    const {
-        onLocationUpdated,
-        ...restCurrentLocation
-    } = useCurrentLocation()
+    const [map, setMap] = useState<MapRef | null>(null)
+
     const {
         spots,
         onBoundsUpdated,
         refresh,
     } = useCurrentSpots()
 
-    useMapActions({
-        refreshSpots: refresh,
-    })
+    const initialLocation = useNavigateAction(map)
+    useRefreshAction(refresh)
+
+    const {
+        onLocationUpdated,
+        ...restCurrentLocation
+    } = useCurrentLocation(initialLocation)
 
     const onCurrentLocationUpdated = useCallback((center: Coordinate, zoom: number, bounds: Bounds) => {
         onLocationUpdated(center, zoom)
@@ -45,6 +55,10 @@ export function Map() {
         [router],
     )
 
+    const onSpotClicked = useCallback(
+        (s: Spot) => router.push(`/spots/${s.id}`),
+        [router],
+    )
 
     if (restCurrentLocation.isLoading) {
         return <MapLoader />
@@ -59,13 +73,14 @@ export function Map() {
         <div className='h-full w-full p-1'>
             <LeafletMap
                 className='h-full w-full rounded-xl shadow-md'
+                forwardedRef={setMap}
                 center={location}
                 zoom={zoom}
                 spots={spots}
                 markerIconUrl='/icons/pin.svg'
                 onCurrentLocationUpdated={onCurrentLocationUpdated}
                 onCoordinateClicked={onCoordinateClicked}
-                onSpotClicked={(s) => router.push(`/spots/${s.id}`)}
+                onSpotClicked={onSpotClicked}
             />
         </div>
     )

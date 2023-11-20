@@ -35,11 +35,19 @@ type UseCurrentLocationResult = (
     }
 ) & UseCurrentLocationResultBase
 
-export function useCurrentLocation(): UseCurrentLocationResult {
+export function useCurrentLocation(initialLocation?: Coordinate): UseCurrentLocationResult {
     const [currentLocationState, setCurrentLocationState] = useState<CurrentLocation | 'loading'>('loading')
 
     // NextJS hydration
     useEffect(() => {
+        if (initialLocation) {
+            setCurrentLocationState({
+                coordinate: initialLocation,
+                zoom: defaultLocationState.zoom,
+            })
+            return
+        }
+
         const savedLocation = getLocation()
         if (savedLocation) {
             setCurrentLocationState(savedLocation)
@@ -61,6 +69,7 @@ export function useCurrentLocation(): UseCurrentLocationResult {
             }),
             () => setCurrentLocationState(defaultLocationState),
         )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (currentLocationState === 'loading') {

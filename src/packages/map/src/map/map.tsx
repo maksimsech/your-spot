@@ -1,3 +1,8 @@
+import {
+    forwardRef,
+    type ForwardedRef,
+} from 'react'
+
 import { icon } from 'leaflet'
 import {
     MapContainer,
@@ -6,24 +11,28 @@ import {
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
-import type { MapProps } from '@your-spot/map-types'
+import type {
+    MapProps,
+    MapRef,
+} from '@your-spot/map-types'
 
 import { MapControl } from './map-control'
 
 import './map.css'
 
 
-export function Map({
-    className,
-    center,
-    zoom,
-    spots,
-    markerIconUrl,
-    onCoordinateClicked,
-    onCurrentLocationUpdated,
-    onSpotClicked,
-}: MapProps) {
-    return (
+const Map = forwardRef<MapRef, MapProps>(
+    ({
+        className,
+        center,
+        zoom,
+        spots,
+        markerIconUrl,
+        onCoordinateClicked,
+        onCurrentLocationUpdated,
+        onSpotClicked,
+    }: MapProps,
+    ref: ForwardedRef<MapRef>) => (
         <MapContainer
             center={center}
             zoom={zoom}
@@ -50,9 +59,13 @@ export function Map({
                 </Marker>
             ))}
             <MapControl
+                ref={ref}
                 onCoordinateClicked={onCoordinateClicked}
                 onCurrentLocationUpdated={onCurrentLocationUpdated}
             />
         </MapContainer>
-    )
-}
+    ),
+)
+Map.displayName = 'Map'
+
+export { Map }

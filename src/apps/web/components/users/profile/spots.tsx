@@ -16,7 +16,7 @@ export async function Spots({ id }: SpotsProps) {
     const spots = await getSpotsForAuthor(id)
 
     if (spots.length === 0) {
-        return <span className='text-muted-foreground'>Not spots yet.</span>
+        return <span className='text-muted-foreground'>No spots yet.</span>
     }
 
     return (
@@ -26,7 +26,7 @@ export async function Spots({ id }: SpotsProps) {
                     <Fragment key={s.id}>
                         <Link
                             className='break-words'
-                            href={`/spots/${s.id}`}
+                            href={`/spots/${s.id}?action=navigate&lat=${s.coordinate.lat}&lng=${s.coordinate.lng}`}
                         >
                             {s.title}
                         </Link>
