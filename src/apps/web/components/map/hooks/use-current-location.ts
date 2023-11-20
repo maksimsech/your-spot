@@ -20,16 +20,20 @@ interface CurrentLocation {
     zoom: number
 }
 
-type UseCurrentLocationResult =
+type UseCurrentLocationResultBase = {
+    onLocationUpdated: (coordinate: Coordinate, zoom: number) => void
+}
+
+type UseCurrentLocationResult = (
     | {
         isLoading: false
         location: Coordinate
         zoom: number
-        onLocationUpdated: (coordinate: Coordinate, zoom: number) => void
     }
     | {
         isLoading: true
     }
+) & UseCurrentLocationResultBase
 
 export function useCurrentLocation(): UseCurrentLocationResult {
     const [currentLocationState, setCurrentLocationState] = useState<CurrentLocation | 'loading'>('loading')
@@ -62,6 +66,7 @@ export function useCurrentLocation(): UseCurrentLocationResult {
     if (currentLocationState === 'loading') {
         return {
             isLoading: true,
+            onLocationUpdated: saveLocation,
         }
     }
 
