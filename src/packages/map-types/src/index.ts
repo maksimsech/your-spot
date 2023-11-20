@@ -16,3 +16,7 @@ export interface MapProps {
     onCurrentLocationUpdated?: (coordinate: Coordinate, zoom: number, bounds: Bounds) => void
     onSpotClicked: (spot: Spot) => void
 }
+
+export interface MapRef {
+    setCurrentLocation: (location: Coordinate, zoom?: number) => void
+}
