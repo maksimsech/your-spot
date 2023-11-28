@@ -1,2 +1,2 @@
-export * from './spot-service'
-export * from './user-service'
+export * from './spots'
+export * from './user'

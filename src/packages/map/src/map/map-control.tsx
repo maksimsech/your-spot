@@ -19,7 +19,7 @@ import type {
 
 interface MapControlProps {
     onCoordinateClicked: (coordinate: Coordinate) => void
-    onCurrentLocationUpdated?: MapProps['onCurrentLocationUpdated']
+    onCurrentLocationUpdated: MapProps['onCurrentLocationUpdated']
 }
 
 interface MapControlRef {
@@ -46,7 +46,7 @@ const MapControl = forwardRef<MapControlRef, MapControlProps>(
                 }
 
                 const doubleClickTimeStamp = latestDoubleClickTimeStamp.current
-                // TODO: Looks like bug in leaflet. Investigate later
+                // TODO: Looks like bug in leaflet. Revisit whenever newer version comes up.
                 if (doubleClickTimeStamp !== null && timeStamp - doubleClickTimeStamp < 45) {
                     return
                 }
@@ -74,31 +74,40 @@ const MapControl = forwardRef<MapControlRef, MapControlProps>(
 
         const onMove = useCallback(
             () => {
-                if (onCurrentLocationUpdated) {
-                    const mapCenter = map.getCenter()
-                    const mapZoom = map.getZoom()
-                    const mapBounds = map.getBounds()
-
-                    const center = toCoordinate(mapCenter)
-                    const bounds = {
-                        southWest: toCoordinate(mapBounds.getSouthWest()),
-                        northEast: toCoordinate(mapBounds.getNorthEast()),
-                        northWest: toCoordinate(mapBounds.getNorthWest()),
-                        southEast: toCoordinate(mapBounds.getSouthEast()),
-                    }
-                    onCurrentLocationUpdated(center, mapZoom, bounds)
+                if (!onCurrentLocationUpdated) {
+                    return
                 }
+
+                const mapCenter = map.getCenter()
+                const zoom = map.getZoom()
+                const minZoom = map.getMinZoom()
+                const maxZoom = map.getMaxZoom()
+                const mapBounds = map.getBounds()
+
+                const coordinate = toCoordinate(mapCenter)
+                const bounds = {
+                    southWest: toCoordinate(mapBounds.getSouthWest()),
+                    northEast: toCoordinate(mapBounds.getNorthEast()),
+                    northWest: toCoordinate(mapBounds.getNorthWest()),
+                    southEast: toCoordinate(mapBounds.getSouthEast()),
+                }
+                onCurrentLocationUpdated({
+                    coordinate,
+                    zoom,
+                    minZoom,
+                    maxZoom,
+                    bounds,
+                })
             },
             [map, onCurrentLocationUpdated],
         )
 
         useEffect(() => {
-        // TODO: To pass bounds initially. Check for better solution
-            onMove()
-            map.on('move', onMove)
+            // onMove()
+            map.on('moveend', onMove)
 
             return () => {
-                map.off('move', onMove)
+                map.off('moveend', onMove)
             }
         }, [map, onMove])
 

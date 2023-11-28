@@ -19,6 +19,14 @@ export interface Spot {
     authorId: string | null
 }
 
+export interface SpotInfo extends Pick<Spot, 'id' | 'coordinate'> {
+}
+
+export interface SpotGroup {
+    spotIds: Array<string>
+    coordinate: Coordinate
+}
+
 export interface User {
     id: string
     name: string

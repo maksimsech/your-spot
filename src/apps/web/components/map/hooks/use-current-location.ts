@@ -15,6 +15,8 @@ const defaultLocationState = {
     zoom: 10,
 }
 
+const maximumZoom = 18
+
 interface CurrentLocation {
     coordinate: Coordinate
     zoom: number
@@ -43,7 +45,7 @@ export function useCurrentLocation(initialLocation?: Coordinate): UseCurrentLoca
         if (initialLocation) {
             setCurrentLocationState({
                 coordinate: initialLocation,
-                zoom: defaultLocationState.zoom,
+                zoom: maximumZoom,
             })
             return
         }

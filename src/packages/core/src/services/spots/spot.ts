@@ -9,15 +9,16 @@ import {
 } from '@your-spot/database'
 
 import {
-    boundsToCoordinates,
-    createContractCoordinate,
-    createMongoCoordinate,
-} from './coordinate-service'
-import {
     objectIdToString,
     stringToObjectId,
     toWithStringId,
-} from './objectid-service'
+} from '../common'
+
+import {
+    boundsToCoordinates,
+    createContractCoordinate,
+    createMongoCoordinate,
+} from './coordinate'
 
 
 export function createSpot(spot: Omit<Spot, 'id'>) {
@@ -99,7 +100,14 @@ export async function getSpotsForAuthor(authorId: string) {
 }
 
 export async function getSpotsWithinBounds(bounds: Bounds): Promise<Spot[]> {
-    const dbSpots = await spotCollection
+    const dbSpots = await filterSpotsWithinBounds(bounds)
+        .toArray()
+
+    return dbSpots.map(createSpotFromDbSpot)
+}
+
+function filterSpotsWithinBounds(bounds: Bounds) {
+    return spotCollection
         .find({
             coordinate: {
                 $geoWithin: {
@@ -110,9 +118,6 @@ export async function getSpotsWithinBounds(bounds: Bounds): Promise<Spot[]> {
                 },
             },
         })
-        .toArray()
-
-    return dbSpots.map(createSpotFromDbSpot)
 }
 
 function createSpotFromDbSpot(spot: WithId<DbSpot>): Spot {

@@ -11,11 +11,9 @@ import {
 
 import type { MapRef } from '@your-spot/map-types'
 
-import { useRemoveQueryParams } from '@/hooks/use-remove-query-params'
 
 export function useNavigateAction(map: MapRef | null) {
     const searchParams = useSearchParams()
-    const { removeQueryParams } = useRemoveQueryParams()
 
     const [isInitialLoad, setIsInitialLoad] = useState(true)
 
@@ -31,10 +29,8 @@ export function useNavigateAction(map: MapRef | null) {
             return
         }
 
-        removeQueryParams('action', 'lat', 'lng')
-
         return latLng
-    }, [action, removeQueryParams, searchParams])
+    }, [action, searchParams])
 
     const location = isInitialLoad
         ? processNavigateAction()

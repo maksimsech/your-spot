@@ -7,37 +7,40 @@ import {
 
 import debounce from 'lodash/debounce'
 
-import type {
-    Spot,
-    Bounds,
+import {
+    SpotGroup,
+    type Bounds,
+    type SpotInfo,
 } from '@your-spot/contracts'
 
-import { getSpotsWithinBounds } from '@/actions/spots'
+import { getSpotsAndGroupsWithinBounds } from '@/actions/spots'
 
-
-interface UseCurrentSpotsResult {
-    spots: ReadonlyArray<Spot>
-    onBoundsUpdated: (bounds: Bounds) => void
-    refresh: () => void
-}
 
 // TODO: Refactor
-export function useCurrentSpots(): UseCurrentSpotsResult {
-    const [spots, setSpots] = useState<Spot[]>([])
-    const latestBounds = useRef<Bounds | null>(null)
+export function useCurrentSpots() {
+    const [spots, setSpots] = useState<SpotInfo[]>([])
+    const [spotGroups, setSpotGroups] = useState<SpotGroup[]>([])
+    const latestParams = useRef<Parameters<typeof onBoundsUpdated> | null>(null)
     const latestUpdateTimestamp = useRef<number | null>(null)
 
     const onBoundsUpdated = useMemo(
         () => debounce(
-            async (bounds: Bounds) => {
-                latestBounds.current = bounds
+            async (bounds: Bounds, zoom: number, minZoom: number, maxZoom: number) => {
+                latestParams.current = [bounds, zoom, minZoom, maxZoom]
 
                 const updateTimestamp = Date.now()
                 latestUpdateTimestamp.current = updateTimestamp
 
-                const newSpots = await getSpotsWithinBounds(bounds)
+                const result = await getSpotsAndGroupsWithinBounds({
+                    bounds,
+                    zoom,
+                    minZoom,
+                    maxZoom,
+                })
                 if (updateTimestamp === latestUpdateTimestamp.current) {
-                    setSpots(newSpots)
+                    console.log(result)
+                    setSpots(result.spots)
+                    setSpotGroups(result.spotGroups)
                 }
             },
             100,
@@ -46,12 +49,13 @@ export function useCurrentSpots(): UseCurrentSpotsResult {
     )
 
     const refresh = useCallback(
-        () => latestBounds.current && onBoundsUpdated(latestBounds.current),
+        () => latestParams.current && onBoundsUpdated(...latestParams.current),
         [onBoundsUpdated],
     )
 
     return {
         spots,
+        spotGroups,
         onBoundsUpdated,
         refresh,
     }
