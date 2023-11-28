@@ -76,7 +76,7 @@ export async function getSpotsAndGroupsWithinBounds({
     ...zoomArguments
 }: { bounds: Bounds } & MapZoomArguments) {
     const zoom = mapZoom(zoomArguments)
-    console.log(zoom)
+    console.log('zoom', zoom)
     return await getSpotsAndGroupsWithinBoundsCore(bounds, zoom)
 }
 

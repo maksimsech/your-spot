@@ -103,7 +103,7 @@ const MapControl = forwardRef<MapControlRef, MapControlProps>(
         )
 
         useEffect(() => {
-            // onMove()
+            onMove()
             map.on('moveend', onMove)
 
             return () => {

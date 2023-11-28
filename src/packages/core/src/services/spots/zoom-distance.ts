@@ -1,21 +1,31 @@
-const zoomValues = new Map<number, number>()
-zoomValues.set(0, 1000)
-zoomValues.set(1, 1000)
-zoomValues.set(2, 1000)
-zoomValues.set(3, 1000)
-zoomValues.set(4, 1000)
-zoomValues.set(5, 1000)
-zoomValues.set(6, 1000)
-zoomValues.set(7, 1000)
-zoomValues.set(8, 1000)
-zoomValues.set(9, 1000)
-zoomValues.set(10, 1000)
-
-
 export const minZoom = 0
 export const maxZoom = 10
 
-const defaultZoom = 1000
 export function getDistanceForGroupByZoom(zoom: number) {
-    return zoomValues.get(zoom) ?? defaultZoom
+    if (zoom > 9) {
+        return 0
+    }
+    if (zoom > 8) {
+        return .1
+    }
+    if (zoom > 7) {
+        return .15
+    }
+    if (zoom > 6.5) {
+        return .4
+    }
+    if (zoom > 6) {
+        return .5
+    }
+    if (zoom > 5.5) {
+        return 1.3
+    }
+    if (zoom > 4.5) {
+        return 3
+    }
+    if (zoom > 3) {
+        return 6
+    }
+
+    return Number.MIN_SAFE_INTEGER
 }

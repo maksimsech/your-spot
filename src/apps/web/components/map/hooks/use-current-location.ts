@@ -47,6 +47,7 @@ export function useCurrentLocation(initialLocation?: Coordinate): UseCurrentLoca
                 coordinate: initialLocation,
                 zoom: maximumZoom,
             })
+            saveLocation(initialLocation, maximumZoom)
             return
         }
 
