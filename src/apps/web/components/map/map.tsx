@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 
 import type {
     Coordinate,
+    SpotGroup,
     SpotInfo,
 } from '@your-spot/contracts'
 import type {
@@ -46,6 +47,7 @@ export function Map({
     const [map, setMap] = useState<MapRef | null>(null)
 
     const {
+        isLoading,
         spots,
         spotGroups,
         onBoundsUpdated,
@@ -82,6 +84,16 @@ export function Map({
         (s: SpotInfo) => router.push(`/spots/${s.id}`),
         [router],
     )
+    const onSpotGroupClicked = useCallback(
+        (s: SpotGroup) => {
+            const searchParams = new URLSearchParams()
+            for (const spotId of s.spotIds) {
+                searchParams.append('id', spotId)
+            }
+            router.push(`/spot-groups?${searchParams.toString()}`)
+        },
+        [router],
+    )
 
     const forwardedRef = useCallback((mapRef: MapRef | null) => {
         if (!mapRef) {
@@ -106,7 +118,13 @@ export function Map({
 
     return (
         <>
-            <div className={cn('h-full w-full p-1', className)}>
+            <div
+                className={cn(
+                    'h-full w-full p-1',
+                    className,
+                    { 'animate-pulse': isLoading },
+                )}
+            >
                 <LeafletMap
                     className='h-full w-full rounded-xl shadow-md'
                     forwardedRef={forwardedRef}
@@ -119,6 +137,7 @@ export function Map({
                     onCurrentLocationUpdated={onCurrentLocationUpdated}
                     onCoordinateClicked={onCoordinateClicked}
                     onSpotClicked={onSpotClicked}
+                    onSpotGroupClicked={onSpotGroupClicked}
                 />
             </div>
             {children}

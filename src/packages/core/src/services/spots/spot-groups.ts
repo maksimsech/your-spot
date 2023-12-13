@@ -38,6 +38,7 @@ const emptyResponse = {
     spots: [],
 }
 
+// TODO: Revisit for optimization, revisit turf for better algorithms, etc.
 export async function getSpotsAndGroupsWithinBounds(bounds: Bounds, zoom: number): Promise<SpotGroupsResult> {
     let dbSpots: DbSpotInfo[]
 
@@ -92,6 +93,7 @@ function filterSpotsWithinBounds(bounds: Bounds) {
         })
 }
 
+// TODO: Check for more optimal way of storing
 function createSpotGraph(spots: ReadonlyArray<DbSpotInfo>) {
     const graph: Array<Array<number>> = []
     for (let i = 0; i < spots.length; i++) {
@@ -103,7 +105,6 @@ function createSpotGraph(spots: ReadonlyArray<DbSpotInfo>) {
 
         for (let j = i + 1; j < spots.length; j++) {
             graph[i][j] = graph[j][i] = distance(spots[i].coordinate, spots[j].coordinate)
-            console.log(spots[i]._id, spots[j]._id, graph[i][j])
         }
     }
 

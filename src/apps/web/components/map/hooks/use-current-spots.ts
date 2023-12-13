@@ -18,8 +18,9 @@ import { getSpotsAndGroupsWithinBounds } from '@/actions/spots'
 
 // TODO: Refactor
 export function useCurrentSpots() {
-    const [spots, setSpots] = useState<SpotInfo[]>([])
-    const [spotGroups, setSpotGroups] = useState<SpotGroup[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [spots, setSpots] = useState<ReadonlyArray<SpotInfo>>([])
+    const [spotGroups, setSpotGroups] = useState<ReadonlyArray<SpotGroup>>([])
     const latestParams = useRef<Parameters<typeof onBoundsUpdated> | null>(null)
     const latestUpdateTimestamp = useRef<number | null>(null)
 
@@ -31,16 +32,22 @@ export function useCurrentSpots() {
                 const updateTimestamp = Date.now()
                 latestUpdateTimestamp.current = updateTimestamp
 
-                const result = await getSpotsAndGroupsWithinBounds({
-                    bounds,
-                    zoom,
-                    minZoom,
-                    maxZoom,
-                })
-                if (updateTimestamp === latestUpdateTimestamp.current) {
-                    console.log(result)
-                    setSpots(result.spots)
-                    setSpotGroups(result.spotGroups)
+                setIsLoading(true)
+                try {
+                    const result = await getSpotsAndGroupsWithinBounds({
+                        bounds,
+                        zoom,
+                        minZoom,
+                        maxZoom,
+                    })
+
+                    if (updateTimestamp === latestUpdateTimestamp.current) {
+                        setSpots(result.spots)
+                        setSpotGroups(result.spotGroups)
+                    }
+                }
+                finally {
+                    setIsLoading(false)
                 }
             },
             100,
@@ -54,6 +61,7 @@ export function useCurrentSpots() {
     )
 
     return {
+        isLoading,
         spots,
         spotGroups,
         onBoundsUpdated,

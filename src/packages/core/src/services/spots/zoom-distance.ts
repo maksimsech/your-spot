@@ -1,6 +1,7 @@
 export const minZoom = 0
 export const maxZoom = 10
 
+// TODO: Check how to create function from this.
 export function getDistanceForGroupByZoom(zoom: number) {
     if (zoom > 9) {
         return 0

@@ -34,6 +34,7 @@ const Map = forwardRef<MapRef, MapProps>(
         onCoordinateClicked,
         onCurrentLocationUpdated,
         onSpotClicked,
+        onSpotGroupClicked,
     }: MapProps,
     ref: ForwardedRef<MapRef>) => (
         <MapContainer
@@ -71,7 +72,7 @@ const Map = forwardRef<MapRef, MapProps>(
                     })}
                     eventHandlers={{
                         click() {
-                            console.log('SpotGroup')
+                            onSpotGroupClicked(s)
                         },
                     }}
                 >

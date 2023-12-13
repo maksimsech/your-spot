@@ -23,6 +23,7 @@ export interface MapProps {
         bounds: Bounds
     }) => void
     onSpotClicked: (spot: SpotInfo) => void
+    onSpotGroupClicked: (spotGroup: SpotGroup) => void
 }
 
 export interface MapRef {

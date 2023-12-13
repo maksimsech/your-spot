@@ -9,7 +9,6 @@ import {
     getSpot as getSpotCore,
     updateSpot as updateSpotCore,
     deleteSpot as deleteSpotCore,
-    getSpotsWithinBounds as getSpotsWithinBoundsCore,
     getSpotsAndGroupsWithinBounds as getSpotsAndGroupsWithinBoundsCore,
     minZoom as minZoomCore,
     maxZoom as maxZoomCore,
@@ -67,16 +66,11 @@ export async function deleteSpot(spotId: string) {
     await deleteSpotCore(spotId)
 }
 
-export async function getSpotsWithinBounds(bounds: Bounds) {
-    return await getSpotsWithinBoundsCore(bounds)
-}
-
 export async function getSpotsAndGroupsWithinBounds({
     bounds,
     ...zoomArguments
 }: { bounds: Bounds } & MapZoomArguments) {
     const zoom = mapZoom(zoomArguments)
-    console.log('zoom', zoom)
     return await getSpotsAndGroupsWithinBoundsCore(bounds, zoom)
 }
 
