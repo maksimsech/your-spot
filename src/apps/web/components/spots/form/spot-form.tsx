@@ -11,6 +11,7 @@ import {
     createSpot,
     updateSpot,
 } from '@/actions/spots'
+import {useMap} from '@/components/map'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -55,6 +56,7 @@ export function SpotForm({
 }: SpotFormProps) {
     const router = useRouter()
     const { toast } = useToast()
+    const map = useMap()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -92,7 +94,8 @@ export function SpotForm({
             })
         }
 
-        router.push('/?action=refresh')
+        map?.refreshSpots()
+        router.push('/')
     }
 
     const title = spot ? 'Edit spot' : 'New spot'

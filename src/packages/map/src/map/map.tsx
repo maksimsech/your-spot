@@ -11,6 +11,7 @@ import {
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
+import type { SpotGroup } from '@your-spot/contracts'
 import type {
     MapProps,
     MapRef,
@@ -27,10 +28,13 @@ const Map = forwardRef<MapRef, MapProps>(
         center,
         zoom,
         spots,
+        spotGroups,
         markerIconUrl,
+        markerGroupIconUrl,
         onCoordinateClicked,
         onCurrentLocationUpdated,
         onSpotClicked,
+        onSpotGroupClicked,
     }: MapProps,
     ref: ForwardedRef<MapRef>) => (
         <MapContainer
@@ -58,6 +62,22 @@ const Map = forwardRef<MapRef, MapProps>(
                 >
                 </Marker>
             ))}
+            {spotGroups.map(s => (
+                <Marker
+                    key={getSpotGroupKey(s)}
+                    position={[s.coordinate.lat, s.coordinate.lng]}
+                    icon={icon({
+                        iconUrl: markerGroupIconUrl,
+                        iconSize: [24, 24],
+                    })}
+                    eventHandlers={{
+                        click() {
+                            onSpotGroupClicked(s)
+                        },
+                    }}
+                >
+                </Marker>
+            ))}
             <MapControl
                 ref={ref}
                 onCoordinateClicked={onCoordinateClicked}
@@ -69,3 +89,7 @@ const Map = forwardRef<MapRef, MapProps>(
 Map.displayName = 'Map'
 
 export { Map }
+
+function getSpotGroupKey(spotGroup: SpotGroup) {
+    return `${spotGroup.coordinate.lat}${spotGroup.coordinate.lng}`
+}

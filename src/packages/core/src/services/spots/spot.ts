@@ -1,23 +1,10 @@
-import type {
-    Bounds,
-    Spot,
-} from '@your-spot/contracts'
-import {
-    WithId,
-    Spot as DbSpot,
-    spotCollection,
-} from '@your-spot/database'
+import type { Spot } from '@your-spot/contracts'
+import { spotCollection } from '@your-spot/database'
 
-import {
-    boundsToCoordinates,
-    createContractCoordinate,
-    createMongoCoordinate,
-} from './coordinate-service'
-import {
-    objectIdToString,
-    stringToObjectId,
-    toWithStringId,
-} from './objectid-service'
+import { stringToObjectId } from '../common'
+
+import { createMongoCoordinate } from './coordinate'
+import { createSpot as createSpotFromDbSpot } from './mapper'
 
 
 export function createSpot(spot: Omit<Spot, 'id'>) {
@@ -77,8 +64,16 @@ export async function getSpot(spotId: string) {
     return createSpotFromDbSpot(dbSpot)
 }
 
-export async function getAllSpots() {
-    const dbSpots = await spotCollection.find().toArray()
+export async function getSpots(ids: ReadonlyArray<string>) {
+    const objectIds = ids.map(stringToObjectId)
+
+    const dbSpots = await spotCollection
+        .find({
+            _id: {
+                $in: objectIds,
+            },
+        })
+        .toArray()
 
     return dbSpots.map(createSpotFromDbSpot)
 }
@@ -96,34 +91,5 @@ export async function getSpotsForAuthor(authorId: string) {
     const dbSpots = await spotCollection.find({ authorId: authorObjectId }).toArray()
 
     return dbSpots.map(createSpotFromDbSpot)
-}
-
-export async function getSpotsWithinBounds(bounds: Bounds): Promise<Spot[]> {
-    const dbSpots = await spotCollection
-        .find({
-            coordinate: {
-                $geoWithin: {
-                    $geometry: {
-                        type: 'Polygon',
-                        coordinates: boundsToCoordinates(bounds),
-                    },
-                },
-            },
-        })
-        .toArray()
-
-    return dbSpots.map(createSpotFromDbSpot)
-}
-
-function createSpotFromDbSpot(spot: WithId<DbSpot>): Spot {
-    const authorId = spot.authorId
-        ? objectIdToString(spot.authorId)
-        : null
-
-    return {
-        ...toWithStringId(spot),
-        coordinate: createContractCoordinate(spot.coordinate),
-        authorId,
-    }
 }
 
