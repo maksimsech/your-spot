@@ -1,4 +1,4 @@
 export {
-    MapProvider as Map,
+    Map,
     useMap,
 } from './context'

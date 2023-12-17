@@ -24,6 +24,7 @@ interface SpotInfoProps {
 }
 
 export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
+    // TODO: Revisit this with proper authorization
     const user = await getAuthorizedUser()
 
     const showEdit = user && canEditSpot(spot, user)

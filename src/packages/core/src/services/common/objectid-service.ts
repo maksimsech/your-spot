@@ -28,3 +28,11 @@ export function objectIdToString(id: ObjectId) {
 export function stringToObjectId(id: string) {
     return ObjectId.createFromHexString(id)
 }
+
+export function isValid(id: string) {
+    return ObjectId.isValid(id)
+}
+
+export function isNotValid(id: string) {
+    return !isValid(id)
+}

@@ -29,7 +29,7 @@ export function createSpot(spot: WithId<DbSpot>): Spot {
 
 export function createSpotInfo(spot: Pick<WithId<DbSpot>, '_id' | 'coordinate'>): SpotInfo {
     return {
-        ...toWithStringId(spot),
+        id: objectIdToString(spot._id),
         coordinate: createContractCoordinate(spot.coordinate),
     }
 }
