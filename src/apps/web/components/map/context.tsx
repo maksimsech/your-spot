@@ -9,8 +9,8 @@ import {
 import type { Coordinate } from '@your-spot/contracts'
 
 import {
-    Map,
-    type MapProps,
+    Map as InnerMap,
+    type MapProps as InnerMapProps,
 } from './map'
 
 
@@ -27,16 +27,19 @@ export function useMap() {
     return mapContext
 }
 
-interface MapProviderProps extends Omit<MapProps, 'setMapContext'> {
+// In reality this component should be called MapProvider, but for type clarity
+// and to not introduce additional component to hide provider lets rename this to hide.
+// It might be fixed with HOC in someway but nah..
+interface MapProps extends Omit<InnerMapProps, 'setMapContext'> {
 
 }
 
-export function MapProvider(props: MapProviderProps) {
+export function Map(props: MapProps) {
     const [mapContext, setMapContext] = useState<MapContext | null>(null)
 
     return (
         <MapContext.Provider value={mapContext}>
-            <Map
+            <InnerMap
                 setMapContext={setMapContext}
                 {...props}
             />

@@ -31,6 +31,8 @@ export const config = {
 export default async function middleware(request: NextRequest) {
     if (request.url.includes('/api')) {
         if (request.method === 'GET' && ignoredAuthPages.some(p => request.url.includes(p))) {
+            console.log('middleware @auth.js default route were accessed and blocked.', request.geo, request.ip)
+
             const url = request.nextUrl.clone()
 
             url.pathname = '/404'

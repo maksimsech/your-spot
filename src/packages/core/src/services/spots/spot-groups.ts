@@ -38,6 +38,7 @@ const emptyResponse = {
     spots: [],
 }
 
+const logLabel = 'spot-groups/getSpotsAndGroupsWithinBounds'
 // TODO: Revisit for optimization, revisit turf for better algorithms, etc.
 export async function getSpotsAndGroupsWithinBounds(bounds: Bounds, zoom: number): Promise<SpotGroupsResult> {
     let dbSpots: DbSpotInfo[]
@@ -45,6 +46,8 @@ export async function getSpotsAndGroupsWithinBounds(bounds: Bounds, zoom: number
     if (!isAreaWithinAllowed(bounds)) {
         return emptyResponse
     }
+
+    console.time(logLabel)
 
     try {
         dbSpots = await filterSpotsWithinBounds(bounds)
@@ -55,19 +58,25 @@ export async function getSpotsAndGroupsWithinBounds(bounds: Bounds, zoom: number
     }
     catch (e) {
         if (e instanceof MongoServerError && e.code === 2 && e.codeName === 'BadValue') {
-            return {
-                spotGroups: [],
-                spots: [],
-            }
+            console.warn(`${logLabel} Wrong bounds were passed to getSpotsAndGroupsWithinBounds`, bounds)
+
+            return emptyResponse
         } else {
             throw e
         }
     }
 
+    console.timeLog(logLabel, `dbSpots.length: ${dbSpots.length}`)
+
     const graph = createSpotGraph(dbSpots)
     const distance = getDistanceForGroupByZoom(zoom)
     const spotGroups = getSpotGroups(dbSpots, graph, distance)
-    return mapSpotGroups(spotGroups)
+    const result = mapSpotGroups(spotGroups)
+
+    console.timeLog(logLabel, `groups: ${result.spotGroups.length} spots: ${result.spots.length}`)
+    console.timeEnd(logLabel)
+
+    return result
 }
 
 function isAreaWithinAllowed(bounds: Bounds) {

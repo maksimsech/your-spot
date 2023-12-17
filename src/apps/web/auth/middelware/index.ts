@@ -8,6 +8,7 @@ export * from './config'
 
 export function validateRoute(session: Session | null, request: Request) {
     if (!validateAuthenticatedRoute(session, request)) {
+        console.log('middleware/validateRoute authorized route were accessed.', request.url)
         return false
     }
 

@@ -11,6 +11,7 @@ import {
 } from '@your-spot/database'
 
 import {
+    isNotValid,
     objectIdToString,
     stringToObjectId,
     toWithStringId,
@@ -18,15 +19,12 @@ import {
 
 
 export async function getUser(id: string) {
-    let objectId = null
-
-    try {
-        objectId = stringToObjectId(id)
-    }
-    catch
-    {
+    if (isNotValid(id)) {
+        console.warn('user/getUser Wrong id were passed.', id)
         return null
     }
+
+    const objectId = stringToObjectId(id)
 
     const dbUser = await userCollection.findOne({
         _id: objectId,
@@ -39,15 +37,12 @@ export async function getUser(id: string) {
 }
 
 export async function getUserAccounts(id: string) {
-    let objectId = null
-
-    try {
-        objectId = stringToObjectId(id)
-    }
-    catch
-    {
+    if (isNotValid(id)) {
+        console.warn('user/getUserAccounts Wrong id were passed.', id)
         return []
     }
+
+    const objectId = stringToObjectId(id)
 
     const dbAccounts = await accountCollection
         .find({
