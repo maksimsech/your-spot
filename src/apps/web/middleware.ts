@@ -43,7 +43,7 @@ export default async function middleware(request: NextRequest) {
     }
 
     const session = await auth()
-    if (!validateRoute(session, request)) {
+    if (!(await validateRoute(session, request))) {
         return NextResponse.redirect(new URL('/', request.url))
     }
 
