@@ -1,10 +1,9 @@
-import { Account } from 'models/account'
-
 import {
     db,
     authDb,
 } from './client'
 import {
+    Account,
     Spot,
     User,
 } from './models'

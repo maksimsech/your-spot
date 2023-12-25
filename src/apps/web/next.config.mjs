@@ -8,6 +8,11 @@ const nextConfig = {
         '@your-spot/map-types',
         '@your-spot/contracts',
     ],
+    experimental: {
+        serverComponentsExternalPackages: [
+            '@turf/turf',
+        ],
+    },
 }
 
 export default nextConfig
