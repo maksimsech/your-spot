@@ -22,7 +22,12 @@ export function DropdownItems() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => signOut()}>
+                <DropdownMenuItem
+                    onClick={() => {
+                        signOut()
+                        router.refresh()
+                    }}
+                >
                     Sign out
                 </DropdownMenuItem>
             </DropdownMenuGroup>

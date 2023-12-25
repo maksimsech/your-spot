@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidateTag } from 'next/cache'
+
 import type {
     Bounds,
     Spot,
@@ -19,6 +21,7 @@ import {
     canDeleteSpot,
     canEditSpot,
 } from '@/auth/rules/spots'
+import { getSpotCacheTag } from '@/cache/spots'
 
 
 export async function createSpot(spot: Omit<Spot, 'id' | 'authorId'>) {
@@ -46,6 +49,8 @@ export async function updateSpot(spot: Spot) {
     }
 
     await updateSpotCore(spot)
+
+    revalidateSpotPage(spot.id)
 }
 
 export async function deleteSpot(spotId: string) {
@@ -64,6 +69,8 @@ export async function deleteSpot(spotId: string) {
     }
 
     await deleteSpotCore(spotId)
+
+    revalidateSpotPage(spot.id)
 }
 
 export async function getSpotsAndGroupsWithinBounds({
@@ -72,6 +79,11 @@ export async function getSpotsAndGroupsWithinBounds({
 }: { bounds: Bounds } & MapZoomArguments) {
     const zoom = mapZoom(zoomArguments)
     return await getSpotsAndGroupsWithinBoundsCore(bounds, zoom)
+}
+
+
+function revalidateSpotPage(spotId: string) {
+    revalidateTag(getSpotCacheTag(spotId))
 }
 
 type MapZoomArguments = {

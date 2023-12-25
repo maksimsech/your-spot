@@ -1,10 +1,13 @@
+import { unstable_cache as cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 
 import {
     getSpot,
     getUser,
+    isNotValidId,
 } from '@your-spot/core'
 
+import { getSpotCacheTag } from '@/cache/spots'
 import { SpotInfo } from '@/components/spots/info'
 
 
@@ -19,7 +22,13 @@ export default async function Page({
         id,
     },
 }: PageProps) {
-    const spot = await getSpot(id)
+    if (isNotValidId(id)) {
+        notFound()
+    }
+
+    // TODO: Revisit with newer versions
+    const cachedGetSpot = cache(getSpot, ['get-spot'], { tags: [getSpotCacheTag(id)] })
+    const spot = await cachedGetSpot(id)
     if (!spot) {
         notFound()
     }
