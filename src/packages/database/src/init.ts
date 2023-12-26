@@ -1,4 +1,3 @@
-// TODO: Add geo index config for spot collection
 import { spotCollection } from './collections'
 
 

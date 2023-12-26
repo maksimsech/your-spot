@@ -50,7 +50,7 @@ export function useCurrentSpots() {
                     setIsLoading(false)
                 }
             },
-            100,
+            300,
         ),
         [],
     )
