@@ -71,7 +71,7 @@ export async function updateSpot(spot: Spot) {
 export async function getSpot(spotId: string) {
     if (isNotValid(spotId)) {
         console.log('spot/getSpot Wrong id were passed.', spotId)
-        return null
+        throw new IdError(spotId, 'Id is not valid.')
     }
 
     const objectId = stringToObjectId(spotId)

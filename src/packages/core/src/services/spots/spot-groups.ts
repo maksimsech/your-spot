@@ -15,6 +15,7 @@ import {
     MongoServerError,
 } from '@your-spot/database'
 
+import { ToWithReadonlyArray } from '../../types'
 import { objectIdToString } from '../common'
 
 import {
@@ -27,9 +28,10 @@ import { getDistanceForGroupByZoom } from './zoom-distance'
 
 type DbSpotInfo = Pick<WithId<DbSpot>, '_id' | 'coordinate'>
 type DbSpotGroup = { spot: DbSpotInfo, nearSpots: Array<DbSpotInfo> }
-type SpotGroupsResult = {
-    spotGroups: readonly SpotGroup[]
-    spots: readonly SpotInfo[]
+type SpotGroupsResult = ToWithReadonlyArray<SpotsWithSpotGroups>
+type SpotsWithSpotGroups = {
+    spotGroups: SpotGroup[]
+    spots: SpotInfo[]
 }
 
 const maxArea = 390000000000
@@ -181,7 +183,6 @@ function mapSpotGroups(spotGroups: Array<DbSpotGroup>) {
 
             return acc
         },
-        // TODO: Create writable mapping from original type
-        { spotGroups: [], spots: [] } as { spotGroups: Array<SpotGroup>, spots: Array<SpotInfo> },
+        { spotGroups: [], spots: [] } as SpotsWithSpotGroups,
     )
 }

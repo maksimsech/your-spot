@@ -68,7 +68,6 @@ export function SpotForm({
 
     async function handleFormSubmit(values: z.infer<typeof formSchema>) {
         if (spot) {
-            // TODO: Revisit this call. Imho doesn't look good.
             await updateSpot({
                 ...spot,
                 title: values.title,
