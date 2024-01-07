@@ -2,10 +2,8 @@
     "name": "@your-spot/web",
     "private": true,
     "scripts": {
-        "dev": "dotenv -e ../../.env -c -- next dev",
-        "build:local": "dotenv -e ../../.env -c -- next build",
+        "dev": "next dev",
         "build": "next build",
-        "start:local": "dotenv -e ../../.env -c -- next start",
         "start": "next start",
         "lint": "next lint"
     },
