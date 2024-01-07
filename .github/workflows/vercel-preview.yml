@@ -26,6 +26,7 @@ jobs:
               run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
     deploy:
         name: Deploy
+        needs: build
         runs-on: ubuntu-latest
         steps:
             - name: Deploy to Preview + assign Dev env
