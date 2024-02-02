@@ -1,4 +1,4 @@
-import { Session } from 'next-auth'
+import type { Session } from 'next-auth'
 
 import { validateAnonymousRoute } from './anonymous-route'
 import { validateAuthenticatedRoute } from './authenticated-routes'

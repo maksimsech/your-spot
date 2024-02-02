@@ -7,10 +7,10 @@ import {
 
 import debounce from 'lodash/debounce'
 
-import {
+import type {
     SpotGroup,
-    type Bounds,
-    type SpotInfo,
+    Bounds,
+    SpotInfo,
 } from '@your-spot/contracts'
 
 import { getSpotsAndGroupsWithinBounds } from '@/actions/spots'

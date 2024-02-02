@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-import { Spot } from '@your-spot/contracts'
+import type { Spot } from '@your-spot/contracts'
 
 import {
     createSpot,

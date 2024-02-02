@@ -1,13 +1,13 @@
-import {
+import type {
     User,
     Account,
 } from '@your-spot/contracts'
 import {
-    User as DbUser,
-    Account as DbAccount,
-    WithId,
     accountCollection,
     userCollection,
+    type User as DbUser,
+    type Account as DbAccount,
+    type WithId,
 } from '@your-spot/database'
 
 import {

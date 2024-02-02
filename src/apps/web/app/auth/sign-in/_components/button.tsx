@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { signIn } from 'next-auth/react'
 

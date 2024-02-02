@@ -1,4 +1,4 @@
-import { User } from 'next-auth'
+import type { User } from 'next-auth'
 
 import {
     DropdownMenu,
@@ -19,7 +19,7 @@ export function Profile({ user }: ProfileProps) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <UserAvatar
-                    className='h-8 w-8'
+                    className='size-8'
                     image={user.image}
                     name={user.name}
                 />

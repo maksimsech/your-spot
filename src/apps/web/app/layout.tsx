@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 
 import { ThemeProvider } from '@/components/providers/theme'
 import { Toaster } from '@/components/ui/toast'
-import { LayoutProps } from '@/types/layout-props'
+import type { LayoutProps } from '@/types/layout-props'
 
 import './globals.css'
 

@@ -1,4 +1,4 @@
-import { User } from '@your-spot/contracts'
+import type { User } from '@your-spot/contracts'
 
 import {
     Accordion,
