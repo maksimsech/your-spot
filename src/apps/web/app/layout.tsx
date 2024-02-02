@@ -28,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps) {
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <div className='flex h-screen flex-col'>
+                    <div className='flex h-dvh flex-col'>
                         {children}
                     </div>
                     <Toaster />
