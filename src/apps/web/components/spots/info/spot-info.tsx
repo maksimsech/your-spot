@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import {
+import type {
     Spot,
     User,
 } from '@your-spot/contracts'
@@ -58,7 +58,7 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
                             By
                         </span>
                         <UserAvatar
-                            className='h-6 w-6'
+                            className='size-6'
                             name={spotAuthor.name}
                             image={spotAuthor.image}
                         />

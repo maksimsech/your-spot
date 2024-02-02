@@ -15,7 +15,7 @@ import {
     MongoServerError,
 } from '@your-spot/database'
 
-import { ToWithReadonlyArray } from '../../types'
+import type { ToWithReadonlyArray } from '../../types'
 import { objectIdToString } from '../common'
 
 import {

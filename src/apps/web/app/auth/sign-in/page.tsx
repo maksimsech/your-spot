@@ -1,4 +1,4 @@
-import { SignInPageErrorParam } from '@auth/core/types'
+import type { SignInPageErrorParam } from '@auth/core/types'
 import { redirect } from 'next/navigation'
 
 import { config } from '@your-spot/auth'

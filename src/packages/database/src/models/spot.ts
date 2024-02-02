@@ -1,6 +1,6 @@
-import { ObjectId } from 'mongodb'
+import type { ObjectId } from 'mongodb'
 
-import { Coordinate } from '../types'
+import type { Coordinate } from '../types'
 
 
 export interface Spot {

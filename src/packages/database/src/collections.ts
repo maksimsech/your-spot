@@ -2,7 +2,7 @@ import {
     db,
     authDb,
 } from './client'
-import {
+import type {
     Account,
     Spot,
     User,
