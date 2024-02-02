@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Spot } from '@your-spot/contracts'
+import type { Spot } from '@your-spot/contracts'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/utils'

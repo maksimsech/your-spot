@@ -1,4 +1,4 @@
-import {
+import type {
     Account,
     Provider,
 } from '@your-spot/contracts'

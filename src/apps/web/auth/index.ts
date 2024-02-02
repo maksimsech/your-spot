@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthConfig } from 'next-auth'
+import NextAuth, { type NextAuthConfig } from 'next-auth'
 
 import { config } from '@your-spot/auth'
 
