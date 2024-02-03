@@ -126,7 +126,7 @@ export function Map({
                 )}
             >
                 <LeafletMap
-                    className='h-full w-full rounded-xl shadow-md'
+                    className='size-full rounded-xl shadow-md'
                     forwardedRef={forwardedRef}
                     center={location}
                     zoom={zoom}

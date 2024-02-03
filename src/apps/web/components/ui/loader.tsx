@@ -4,7 +4,7 @@ import { SymbolIcon } from '@radix-ui/react-icons'
 export function Loader() {
     return (
         <div className='flex gap-2'>
-            <SymbolIcon className=' h-6 w-6 animate-spin' />
+            <SymbolIcon className='size-6 animate-spin' />
             <span className='font-bold'>Loading</span>
         </div>
     )

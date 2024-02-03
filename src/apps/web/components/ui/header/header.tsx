@@ -20,7 +20,7 @@ export async function Header({ className }: HeaderProps) {
     return (
         <header className={cn('flex w-full flex-none items-center justify-between p-2 shadow-inner border-b dark:border-b-slate-300 border-b-slate-700', className)}>
             <span className='flex items-center gap-1'>
-                <GlobeIcon className='h-5 w-5' />
+                <GlobeIcon className='size-5' />
                 <Link href='/' className='font-bold'>
                     Your spot
                 </Link>

@@ -1,3 +1,5 @@
+// TODO: Add all custom class names
+/* eslint-disable tailwindcss/no-custom-classname */
 import {
     type ElementRef,
     type ComponentPropsWithoutRef,
@@ -90,7 +92,7 @@ const ToastClose = forwardRef<
         toast-close=''
         {...props}
     >
-        <Cross2Icon className='h-4 w-4' />
+        <Cross2Icon className='size-4' />
     </ToastPrimitives.Close>
 ))
 ToastClose.displayName = ToastPrimitives.Close.displayName
