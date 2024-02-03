@@ -3,6 +3,7 @@ name: Deploy to Vercel Preview + Dev envs
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    BUILD_NEXT_ESLINT_IGNORE: ${{ vars.BUILD_NEXT_ESLINT_IGNORE }}
 
 on:
     workflow_dispatch:
@@ -21,6 +22,12 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                 node-version-file: 'src/.nvmrc'
+            - name: Move to src folder
+              run: cd src/
+            - name: Install packages
+              run: npm ci
+            - name: Run ESLint
+              run: npx eslint .
             - name: Install Vercel CLI
               run: npm install vercel@latest --global
             - name: Pull env variables

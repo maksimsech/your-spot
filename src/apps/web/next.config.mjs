@@ -13,6 +13,9 @@ const nextConfig = {
             '@turf/turf',
         ],
     },
+    eslint: {
+        ignoreDuringBuilds: !!process.env['BUILD_NEXT_ESLINT_IGNORE'],
+    },
 }
 
 export default nextConfig
