@@ -23,7 +23,7 @@ export function UserProfile({ user }: UserProfileProps) {
                 <h1 className='font-bold'>{user.name}</h1>
                 {user.image && (
                     <UserAvatar
-                        className='h-12 w-12'
+                        className='size-12'
                         name={user.name}
                         image={user.image}
                     />
