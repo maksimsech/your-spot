@@ -8,7 +8,7 @@ import {
 import type {
     ToastActionElement,
     ToastProps,
-} from '@/components/ui/toast/toast'
+} from './toast'
 
 
 const TOAST_LIMIT = 1

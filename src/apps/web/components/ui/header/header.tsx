@@ -1,10 +1,9 @@
-import { GlobeIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 
 import { getAuthorizedUser } from '@/auth/helper'
 import { cn } from '@/utils'
-import { ThemeModeToggle } from '../theme-toggle'
 
+import { MenuItems } from './menu-items/menu-items'
 import { Profile } from './profile'
 
 
@@ -20,7 +19,6 @@ export async function Header({ className }: HeaderProps) {
     return (
         <header className={cn('flex w-full flex-none items-center justify-between p-2 shadow-inner border-b dark:border-b-slate-300 border-b-slate-700', className)}>
             <span className='flex items-center gap-1'>
-                <GlobeIcon className='size-5' />
                 <Link href='/' className='font-bold'>
                     Your spot
                 </Link>
@@ -35,7 +33,7 @@ export async function Header({ className }: HeaderProps) {
                     </Link>
                 )}
                 {isLoggedIn && <Profile user={user} />}
-                <ThemeModeToggle />
+                <MenuItems />
             </div>
         </header>
     )

@@ -1,5 +1,6 @@
 export * from './spot'
-export * from './spot-groups'
+export * from './groups'
+export * from './search'
 export {
     minZoom,
     maxZoom,

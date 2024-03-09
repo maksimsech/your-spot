@@ -43,7 +43,7 @@ export function UserProfile({ user }: UserProfileProps) {
                 <AccordionItem value='spots'>
                     <AccordionTrigger>Spots</AccordionTrigger>
                     <AccordionContent>
-                        <Spots id={user.id} />
+                        <Spots authorId={user.id} />
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>

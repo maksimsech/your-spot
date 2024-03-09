@@ -12,6 +12,7 @@ import {
     updateSpot as updateSpotCore,
     deleteSpot as deleteSpotCore,
     getSpotsAndGroupsWithinBounds as getSpotsAndGroupsWithinBoundsCore,
+    searchSpots as searchSpotsCore,
     minZoom as minZoomCore,
     maxZoom as maxZoomCore,
 } from '@your-spot/core/services'
@@ -79,6 +80,10 @@ export async function getSpotsAndGroupsWithinBounds({
 }: { bounds: Bounds } & MapZoomArguments) {
     const zoom = mapZoom(zoomArguments)
     return await getSpotsAndGroupsWithinBoundsCore(bounds, zoom)
+}
+
+export async function searchSpots(args: Parameters<typeof searchSpotsCore>[0]) {
+    return await searchSpotsCore(args)
 }
 
 

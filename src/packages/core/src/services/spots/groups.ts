@@ -59,6 +59,7 @@ export async function getSpotsAndGroupsWithinBounds(bounds: Bounds, zoom: number
             .toArray()
     }
     catch (e) {
+        // TODO: Validate this in code.
         if (e instanceof MongoServerError && e.code === 2 && e.codeName === 'BadValue') {
             console.warn(`${logLabel} Wrong bounds were passed to getSpotsAndGroupsWithinBounds`, bounds)
 

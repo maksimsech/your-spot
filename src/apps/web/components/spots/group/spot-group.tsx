@@ -13,7 +13,7 @@ interface SpotGroupProps {
 
 export function SpotGroup({ spots, className }: SpotGroupProps) {
     return (
-        <ScrollArea className={cn(className, 'w-full')}>
+        <ScrollArea className={cn('w-full', className)}>
             <div className='flex flex-col gap-3'>
                 {spots.map(s => (
                     <Link
