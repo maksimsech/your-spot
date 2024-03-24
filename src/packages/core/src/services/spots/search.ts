@@ -20,9 +20,6 @@ export async function searchSpots({ text, bounds, limit = 10 }: SearchSpotsArgum
         return []
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    // await new Promise((res: Function) => setTimeout(() => res(), 4000))
-
     const dbSpots = await spotCollection
         .aggregate<Pick<WithId<DbSpot>, '_id' | 'coordinate' | 'title'>>([
             {
