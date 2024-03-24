@@ -19,7 +19,10 @@ export interface Spot {
     authorId: string | null
 }
 
-export interface SpotInfo extends Pick<Spot, 'id' | 'coordinate'> {
+export interface SpotCoordinates extends Pick<Spot, 'id' | 'coordinate'> {
+}
+
+export interface SpotDescription extends Pick<Spot, 'id' | 'coordinate' | 'title'> {
 }
 
 export interface SpotGroup {

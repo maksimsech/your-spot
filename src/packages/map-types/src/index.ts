@@ -1,7 +1,7 @@
 import type {
     Coordinate,
     Bounds,
-    SpotInfo,
+    SpotCoordinates,
     SpotGroup,
 } from '@your-spot/contracts'
 
@@ -10,7 +10,7 @@ export interface MapProps {
     className?: string
     center: Coordinate
     zoom: number
-    spots: ReadonlyArray<SpotInfo>
+    spots: ReadonlyArray<SpotCoordinates>
     spotGroups: ReadonlyArray<SpotGroup>
     markerIconUrl: string
     markerGroupIconUrl: string
@@ -22,7 +22,7 @@ export interface MapProps {
         maxZoom: number
         bounds: Bounds
     }) => void
-    onSpotClicked: (spot: SpotInfo) => void
+    onSpotClicked: (spot: SpotCoordinates) => void
     onSpotGroupClicked: (spotGroup: SpotGroup) => void
 }
 

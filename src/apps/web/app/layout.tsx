@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
+import { CurrentBoundsProvider } from '@/components/map'
 import { ThemeProvider } from '@/components/providers/theme'
 import { Toaster } from '@/components/ui/toast'
 import type { LayoutProps } from '@/types/layout-props'
@@ -28,9 +29,11 @@ export default function RootLayout({ children }: LayoutProps) {
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <div className='flex h-dvh flex-col'>
-                        {children}
-                    </div>
+                    <CurrentBoundsProvider>
+                        <div className='flex h-dvh flex-col'>
+                            {children}
+                        </div>
+                    </CurrentBoundsProvider>
                     <Toaster />
                 </ThemeProvider>
             </body>

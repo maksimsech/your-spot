@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 import type {
     Coordinate,
     SpotGroup,
-    SpotInfo,
+    SpotCoordinates,
 } from '@your-spot/contracts'
 import type {
     MapRef,
@@ -26,6 +26,7 @@ import {
     useCurrentSpots,
     useNavigateAction,
 } from './hooks'
+import { useMutableCurrentBounds } from './hooks/use-current-bounds'
 import {
     Map as LeafletMap,
     MapLoader,
@@ -61,6 +62,8 @@ export function Map({
         ...restCurrentLocation
     } = useCurrentLocation(initialLocation)
 
+    const { setCurrentBounds } = useMutableCurrentBounds()
+
     const onCurrentLocationUpdated = useCallback(
         ({
             coordinate,
@@ -71,8 +74,9 @@ export function Map({
         }: Parameters<LibMapProps['onCurrentLocationUpdated']>[0]) => {
             onLocationUpdated(coordinate, zoom)
             onBoundsUpdated(bounds, zoom, minZoom, maxZoom)
+            setCurrentBounds(bounds)
         },
-        [onLocationUpdated, onBoundsUpdated],
+        [onLocationUpdated, onBoundsUpdated, setCurrentBounds],
     )
 
     const onCoordinateClicked = useCallback(
@@ -81,7 +85,7 @@ export function Map({
     )
 
     const onSpotClicked = useCallback(
-        (s: SpotInfo) => router.push(`/spots/${s.id}`),
+        (s: SpotCoordinates) => router.push(`/spots/${s.id}`),
         [router],
     )
     const onSpotGroupClicked = useCallback(

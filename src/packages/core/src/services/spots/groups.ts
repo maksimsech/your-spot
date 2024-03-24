@@ -6,7 +6,7 @@ import {
 import type {
     Bounds,
     SpotGroup,
-    SpotInfo,
+    SpotCoordinates,
 } from '@your-spot/contracts'
 import {
     type WithId,
@@ -22,7 +22,7 @@ import {
     boundsToCoordinates,
     createContractCoordinate,
 } from './coordinate'
-import { createSpotInfo } from './mapper'
+import { createSpotCoordinates } from './mapper'
 import { getDistanceForGroupByZoom } from './zoom-distance'
 
 
@@ -31,7 +31,7 @@ type DbSpotGroup = { spot: DbSpotInfo, nearSpots: Array<DbSpotInfo> }
 type SpotGroupsResult = ToWithReadonlyArray<SpotsWithSpotGroups>
 type SpotsWithSpotGroups = {
     spotGroups: SpotGroup[]
-    spots: SpotInfo[]
+    spots: SpotCoordinates[]
 }
 
 const maxArea = 390000000000
@@ -59,6 +59,7 @@ export async function getSpotsAndGroupsWithinBounds(bounds: Bounds, zoom: number
             .toArray()
     }
     catch (e) {
+        // TODO: Validate this in code.
         if (e instanceof MongoServerError && e.code === 2 && e.codeName === 'BadValue') {
             console.warn(`${logLabel} Wrong bounds were passed to getSpotsAndGroupsWithinBounds`, bounds)
 
@@ -178,7 +179,7 @@ function mapSpotGroups(spotGroups: Array<DbSpotGroup>) {
                 })
             }
             else {
-                acc.spots.push(createSpotInfo(current.spot))
+                acc.spots.push(createSpotCoordinates(current.spot))
             }
 
             return acc

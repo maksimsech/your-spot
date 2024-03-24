@@ -9,11 +9,11 @@ import { Separator } from '@/components/ui/separator'
 
 
 interface SpotsProps {
-    id: string
+    authorId: string
 }
 
-export async function Spots({ id }: SpotsProps) {
-    const spots = await getSpotsForAuthor(id)
+export async function Spots({ authorId }: SpotsProps) {
+    const spots = await getSpotsForAuthor({ authorId })
 
     if (spots.length === 0) {
         return <span className='text-muted-foreground'>No spots yet.</span>

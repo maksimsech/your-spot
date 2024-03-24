@@ -15,7 +15,7 @@ function createClient() {
     return new MongoClient(process.env.DATABASE_URL!, {
         serverApi: {
             version: ServerApiVersion.v1,
-            strict: true,
+            strict: false, // TODO: Revisit. For now it is needed for Atlas Search to work
             deprecationErrors: true,
         },
     })

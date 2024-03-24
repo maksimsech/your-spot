@@ -105,7 +105,12 @@ export async function getSpots(ids: ReadonlyArray<string>) {
     return dbSpots.map(createSpotFromDbSpot)
 }
 
-export async function getSpotsForAuthor(authorId: string) {
+interface GetSpotsForAuthorArguments {
+    authorId: string,
+    limit?: number
+}
+
+export async function getSpotsForAuthor({ authorId, limit = 10 }: GetSpotsForAuthorArguments) {
     if (isNotValid(authorId)) {
         console.warn('spot/getSpotsForAuthor Wrong id were passed.', authorId)
         return []
@@ -113,7 +118,10 @@ export async function getSpotsForAuthor(authorId: string) {
 
     const authorObjectId = stringToObjectId(authorId)
 
-    const dbSpots = await spotCollection.find({ authorId: authorObjectId }).toArray()
+    const dbSpots = await spotCollection
+        .find({ authorId: authorObjectId })
+        .limit(limit)
+        .toArray()
 
     return dbSpots.map(createSpotFromDbSpot)
 }
