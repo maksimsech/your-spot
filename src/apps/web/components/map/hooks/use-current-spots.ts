@@ -10,7 +10,7 @@ import debounce from 'lodash/debounce'
 import type {
     SpotGroup,
     Bounds,
-    SpotInfo,
+    SpotCoordinates,
 } from '@your-spot/contracts'
 
 import { getSpotsAndGroupsWithinBounds } from '@/actions/spots'
@@ -19,7 +19,7 @@ import { getSpotsAndGroupsWithinBounds } from '@/actions/spots'
 // TODO: Refactor
 export function useCurrentSpots() {
     const [isLoading, setIsLoading] = useState(false)
-    const [spots, setSpots] = useState<ReadonlyArray<SpotInfo>>([])
+    const [spots, setSpots] = useState<ReadonlyArray<SpotCoordinates>>([])
     const [spotGroups, setSpotGroups] = useState<ReadonlyArray<SpotGroup>>([])
     const latestParams = useRef<Parameters<typeof onBoundsUpdated> | null>(null)
     const latestUpdateTimestamp = useRef<number | null>(null)

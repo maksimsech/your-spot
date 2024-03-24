@@ -1,6 +1,7 @@
 import type {
     Spot,
-    SpotInfo,
+    SpotCoordinates,
+    SpotDescription,
 } from '@your-spot/contracts'
 import type {
     WithId,
@@ -27,9 +28,17 @@ export function createSpot(spot: WithId<DbSpot>): Spot {
     }
 }
 
-export function createSpotInfo(spot: Pick<WithId<DbSpot>, '_id' | 'coordinate'>): SpotInfo {
+export function createSpotCoordinates(spot: Pick<WithId<DbSpot>, '_id' | 'coordinate'>): SpotCoordinates {
     return {
         id: objectIdToString(spot._id),
         coordinate: createContractCoordinate(spot.coordinate),
+    }
+}
+
+export function createSpotDescription(spot: Pick<WithId<DbSpot>, '_id' | 'coordinate' | 'title'>): SpotDescription {
+    return {
+        id: objectIdToString(spot._id),
+        coordinate: createContractCoordinate(spot.coordinate),
+        title: spot.title,
     }
 }

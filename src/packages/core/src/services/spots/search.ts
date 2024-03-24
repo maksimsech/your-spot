@@ -6,35 +6,16 @@ import {
 } from '@your-spot/database'
 
 import { createMongoCoordinate } from './coordinate'
-import { createSpot } from './mapper'
+import { createSpotDescription } from './mapper'
 
 
 interface SearchSpotsArguments {
     text: string
-    // bounds: Bounds
+    bounds: Bounds
     limit?: number
 }
 
-export async function searchSpots({ text, limit = 10 }: SearchSpotsArguments) {
-    const bounds = {
-        'southWest': {
-            'lat': 52.20760667286523,
-            'lng': 19.93606567382813,
-        },
-        'northEast': {
-            'lat': 52.63639665997182,
-            'lng': 22.001495361328125,
-        },
-        'northWest': {
-            'lat': 52.63639665997182,
-            'lng': 19.93606567382813,
-        },
-        'southEast': {
-            'lat': 52.20760667286523,
-            'lng': 22.001495361328125,
-        },
-    }
-
+export async function searchSpots({ text, bounds, limit = 10 }: SearchSpotsArguments) {
     if (!text) {
         return []
     }
@@ -43,7 +24,7 @@ export async function searchSpots({ text, limit = 10 }: SearchSpotsArguments) {
     // await new Promise((res: Function) => setTimeout(() => res(), 4000))
 
     const dbSpots = await spotCollection
-        .aggregate<WithId<DbSpot>>([
+        .aggregate<Pick<WithId<DbSpot>, '_id' | 'coordinate' | 'title'>>([
             {
                 $search: {
                     index: 'spots-autocomplete',
@@ -64,6 +45,7 @@ export async function searchSpots({ text, limit = 10 }: SearchSpotsArguments) {
                             },
                         ],
                     },
+                    returnStoredSource: true,
                 },
             },
             {
@@ -72,7 +54,7 @@ export async function searchSpots({ text, limit = 10 }: SearchSpotsArguments) {
         ])
         .toArray()
 
-    return dbSpots.map(createSpot)
+    return dbSpots.map(createSpotDescription)
 }
 
 

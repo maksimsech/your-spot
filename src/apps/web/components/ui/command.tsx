@@ -72,8 +72,6 @@ const CommandDialog = ({
     )
 }
 
-
-
 const CommandInput = forwardRef<
   ElementRef<typeof CommandPrimitive.Input>,
   ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
@@ -91,7 +89,6 @@ const CommandInput = forwardRef<
         {children}
     </div>
 ))
-
 CommandInput.displayName = CommandPrimitive.Input.displayName
 
 const CommandList = forwardRef<
@@ -104,7 +101,6 @@ const CommandList = forwardRef<
         {...restProps}
     />
 ))
-
 CommandList.displayName = CommandPrimitive.List.displayName
 
 const CommandEmpty = forwardRef<
@@ -117,7 +113,6 @@ const CommandEmpty = forwardRef<
         {...props}
     />
 ))
-
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName
 
 const CommandGroup = forwardRef<
@@ -133,7 +128,6 @@ const CommandGroup = forwardRef<
         {...restProps}
     />
 ))
-
 CommandGroup.displayName = CommandPrimitive.Group.displayName
 
 const CommandSeparator = forwardRef<

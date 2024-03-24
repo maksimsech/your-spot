@@ -7,21 +7,30 @@ import {
 
 import debounce from 'lodash/debounce'
 
-import type { SpotInfo } from '@your-spot/contracts'
+import type { SpotDescription } from '@your-spot/contracts'
 
 import { searchSpots } from '@/actions/spots'
+import { useGetCurrentBounds } from '@/components/map'
 
 
 export function useSearchSpots() {
     const [isLoading, setIsLoading] = useState(false)
-    const [spots, setSpots] = useState<ReadonlyArray<SpotInfo>>([])
+    const [spots, setSpots] = useState<ReadonlyArray<SpotDescription>>([])
     const latestUpdateTimestamp = useRef<number | null>(null)
+
+    const getCurrentBounds = useGetCurrentBounds()
 
     const onTextUpdated = useMemo(
         () => debounce(
             async (text: string) => {
                 if (!text) {
                     setSpots([])
+                    return
+                }
+
+                const currentBounds = getCurrentBounds()
+                if (!currentBounds) {
+                    // Something went wrong and this should be the case, but stuff happens...
                     return
                 }
 
@@ -32,6 +41,7 @@ export function useSearchSpots() {
                 try {
                     const result = await searchSpots({
                         text,
+                        bounds: currentBounds,
                     })
 
                     if (updateTimestamp === latestUpdateTimestamp.current) {
@@ -44,7 +54,7 @@ export function useSearchSpots() {
             },
             300,
         ),
-        [],
+        [getCurrentBounds],
     )
 
     const reset = useCallback(() => setSpots([]), [])

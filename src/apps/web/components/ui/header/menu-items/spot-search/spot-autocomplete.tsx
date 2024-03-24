@@ -68,12 +68,11 @@ export function SpotAutocomplete({
                             key={s.id}
                             value={s.id}
                             onSelect={() => {
-                                console.log('aasd')
                                 onIsOpenChange(false)
                                 router.push(`/spots/${s.id}`)
                             }}
                         >
-                            {s.coordinate.lat}
+                            {s.title}
                         </CommandItem>
                     ))}
                 </CommandGroup>
