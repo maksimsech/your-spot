@@ -25,6 +25,11 @@ export interface SpotCoordinates extends Pick<Spot, 'id' | 'coordinate'> {
 export interface SpotDescription extends Pick<Spot, 'id' | 'coordinate' | 'title'> {
 }
 
+export interface SpotLikeInformation {
+    likedByUser: boolean
+    likesCount: number
+}
+
 export interface SpotGroup {
     spotIds: Array<string>
     coordinate: Coordinate

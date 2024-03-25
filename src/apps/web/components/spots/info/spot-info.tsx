@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import Link from 'next/link'
 
 import type {
@@ -16,6 +18,7 @@ import { UserAvatar } from '@/components/users/user-avatar'
 import { cn } from '@/utils'
 
 import { DeleteDialog } from './delete-dialog'
+import { LikeButton } from './like-button'
 
 
 interface SpotInfoProps {
@@ -50,19 +53,24 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
                             />
                         )}
                     </div>
-                    <Link
-                        className='text-muted-foreground flex items-center gap-1'
-                        href={`/profile/${spotAuthor.id}`}
-                    >
-                        <span>
-                            By
-                        </span>
-                        <UserAvatar
-                            className='size-6'
-                            name={spotAuthor.name}
-                            image={spotAuthor.image}
-                        />
-                    </Link>
+                    <div className='flex gap-2'>
+                        <Suspense>
+                            <LikeButton spotId={spot.id} />
+                        </Suspense>
+                        <Link
+                            className='text-muted-foreground flex items-center gap-1'
+                            href={`/profile/${spotAuthor.id}`}
+                        >
+                            <span>
+                                By
+                            </span>
+                            <UserAvatar
+                                className='size-6'
+                                name={spotAuthor.name}
+                                image={spotAuthor.image}
+                            />
+                        </Link>
+                    </div>
                 </div>
             )}
             <h2 className='self-center'>
