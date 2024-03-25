@@ -26,6 +26,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/toast'
 
+import { DeleteDialog } from './delete-dialog'
+
 
 const formSchema = z.object({
     title: z
@@ -45,12 +47,14 @@ const formSchema = z.object({
 
 interface SpotFormProps {
     spot?: Spot
+    showDeleteButton: boolean
     lat?: number
     lng?: number
 }
 
 export function SpotForm({
     spot,
+    showDeleteButton,
     lat,
     lng,
 }: SpotFormProps) {
@@ -101,7 +105,15 @@ export function SpotForm({
 
     return (
         <div className='flex flex-col gap-y-6'>
-            <h2>{title}</h2>
+            <div className='flex items-center justify-between'>
+                <h2>{title}</h2>
+                {showDeleteButton && spot && (
+                    <DeleteDialog
+                        id={spot.id}
+                        title={spot.id}
+                    />
+                )}
+            </div>
             <Form {...form}>
                 <form
                     className='space-y-4'

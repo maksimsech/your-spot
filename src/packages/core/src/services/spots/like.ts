@@ -42,16 +42,16 @@ export async function likeSpot(params: LikeSpotArguments) {
     return getLikeInformation(params)
 }
 
-interface DislikeSpotArguments {
+interface RemoveSpotLikeArguments {
     spotId: string
     userId: string
 }
 
-export async function dislikeSpot(params: DislikeSpotArguments) {
+export async function removeSpotLike(params: RemoveSpotLikeArguments) {
     const {
         spotId,
         userId,
-    } = parseLikeIds(params, dislikeSpot.name)
+    } = parseLikeIds(params, removeSpotLike.name)
 
     await spotLikesCollection.findOneAndUpdate(
         {

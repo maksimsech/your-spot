@@ -1,3 +1,8 @@
+import {
+    HeartFilledIcon,
+    HeartIcon,
+} from '@radix-ui/react-icons'
+
 import { getLikeInformation } from '@your-spot/core'
 
 import { getAuthorizedUser } from '@/auth/helper'
@@ -23,6 +28,8 @@ async function LikeButtonContainer({ spotId }: LikeButtonContainerProps) {
             likeInformation={likeInformation}
             userId={userId}
             spotId={spotId}
+            likedIcon={<HeartFilledIcon className='text-red-700' />}
+            blankIcon={<HeartIcon />}
         />
     )
 }

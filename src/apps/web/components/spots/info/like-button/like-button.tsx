@@ -1,31 +1,34 @@
 'use client'
 
-import { useState } from 'react'
-
 import {
-    HeartFilledIcon,
-    HeartIcon,
-} from '@radix-ui/react-icons'
+    type ReactNode,
+    useState,
+} from 'react'
 
 import type { SpotLikeInformation } from '@your-spot/contracts'
 
 import {
-    dislikeSpot,
+    removeSpotLike,
     likeSpot,
 } from '@/actions/spots'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/utils'
 
 
 interface LikeButtonProps {
     likeInformation: SpotLikeInformation
     spotId: string
     userId: string | null
+    likedIcon: ReactNode
+    blankIcon: ReactNode
 }
 
 export function LikeButton({
     likeInformation,
     spotId,
     userId,
+    likedIcon,
+    blankIcon,
 }: LikeButtonProps) {
     const [loading, setLoading] = useState(false)
     const [likedByUser, setLikedByUser] = useState(likeInformation.likedByUser)
@@ -35,7 +38,7 @@ export function LikeButton({
         setLoading(true)
         try {
             const resultPromise = likedByUser
-                ? dislikeSpot({ userId: userId!, spotId })
+                ? removeSpotLike({ userId: userId!, spotId })
                 : likeSpot({ userId: userId!, spotId })
 
             const result = await resultPromise
@@ -48,15 +51,20 @@ export function LikeButton({
         }
     }
 
-    const Icon = likedByUser
-        ? HeartFilledIcon
-        : HeartIcon
+    const anonymous = !userId
+    const icon = userId
+        ? likedByUser
+            ? likedIcon
+            : blankIcon
+        : likedIcon
 
-    const disabled = !userId || loading
+    const disabled = anonymous || loading
 
     return (
         <Button
-            className='flex gap-1'
+            className={cn('flex gap-1 p-2', {
+                'disabled:opacity-100': anonymous,
+            })}
             variant='ghost'
             onClick={handleButtonClick}
             disabled={disabled}
@@ -64,7 +72,7 @@ export function LikeButton({
             <span>
                 {likesCount}
             </span>
-            <Icon />
+            {icon}
         </Button>
     )
 }

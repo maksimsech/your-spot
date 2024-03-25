@@ -16,7 +16,7 @@ import {
     minZoom as minZoomCore,
     maxZoom as maxZoomCore,
     likeSpot as likeSpotCore,
-    dislikeSpot as dislikeSpotCore,
+    removeSpotLike as removeSpotLikeCore,
 } from '@your-spot/core/services'
 
 import { getAuthorizedUser } from '@/auth/helper'
@@ -92,8 +92,8 @@ export async function likeSpot(args: Parameters<typeof likeSpotCore>[0]) {
     return await likeSpotCore(args)
 }
 
-export async function dislikeSpot(args: Parameters<typeof dislikeSpotCore>[0]) {
-    return await dislikeSpotCore(args)
+export async function removeSpotLike(args: Parameters<typeof removeSpotLikeCore>[0]) {
+    return await removeSpotLikeCore(args)
 }
 
 
