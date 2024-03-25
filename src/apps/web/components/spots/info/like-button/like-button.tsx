@@ -32,7 +32,7 @@ export function LikeButton({
 }: LikeButtonProps) {
     const [loading, setLoading] = useState(false)
     const [likedByUser, setLikedByUser] = useState(likeInformation.likedByUser)
-    const [likesCount, setLikesCount] = useState(likeInformation.likesCount)
+    const [likeCount, setLikeCount] = useState(likeInformation.likeCount)
 
     const handleButtonClick = async () => {
         setLoading(true)
@@ -44,7 +44,7 @@ export function LikeButton({
             const result = await resultPromise
 
             setLikedByUser(result.likedByUser)
-            setLikesCount(result.likesCount)
+            setLikeCount(result.likeCount)
         }
         finally {
             setLoading(false)
@@ -52,11 +52,11 @@ export function LikeButton({
     }
 
     const anonymous = !userId
-    const icon = userId
-        ? likedByUser
+    const icon = anonymous
+        ? likedIcon
+        : likedByUser
             ? likedIcon
             : blankIcon
-        : likedIcon
 
     const disabled = anonymous || loading
 
@@ -70,7 +70,7 @@ export function LikeButton({
             disabled={disabled}
         >
             <span>
-                {likesCount}
+                {likeCount}
             </span>
             {icon}
         </Button>

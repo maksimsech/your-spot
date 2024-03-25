@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import Link from 'next/link'
 
 import type {
@@ -30,7 +28,7 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
     return (
         <div className='flex flex-col gap-6'>
             {spotAuthor && (
-                <div className='flex items-baseline justify-between'>
+                <div className='flex items-center justify-between'>
                     <div className='flex gap-2'>
                         {showEdit && (
                             <Link
@@ -41,10 +39,8 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
                             </Link>
                         )}
                     </div>
-                    <div className='flex items-baseline gap-2'>
-                        <Suspense>
-                            <LikeButton spotId={spot.id} />
-                        </Suspense>
+                    <div className='flex items-center gap-2'>
+                        <LikeButton spotId={spot.id} />
                         <Link
                             className='text-muted-foreground flex items-center gap-1'
                             href={`/profile/${spotAuthor.id}`}

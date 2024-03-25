@@ -1,37 +1,18 @@
-import {
-    HeartFilledIcon,
-    HeartIcon,
-} from '@radix-ui/react-icons'
+import { Suspense } from 'react'
 
-import { getLikeInformation } from '@your-spot/core'
+import { HeartIcon } from '@radix-ui/react-icons'
 
-import { getAuthorizedUser } from '@/auth/helper'
-
-import { LikeButton } from './like-button'
+import { LikeButtonContainer } from './like-button-container'
 
 
-interface LikeButtonContainerProps {
+interface LikeButtonProps {
     spotId: string
 }
 
-async function LikeButtonContainer({ spotId }: LikeButtonContainerProps) {
-    const user = await getAuthorizedUser()
-    const userId = user?.id || null
-
-    const likeInformation = await getLikeInformation({
-        spotId,
-        userId,
-    })
-
+export function LikeButton(props: LikeButtonProps) {
     return (
-        <LikeButton
-            likeInformation={likeInformation}
-            userId={userId}
-            spotId={spotId}
-            likedIcon={<HeartFilledIcon className='text-red-700' />}
-            blankIcon={<HeartIcon />}
-        />
+        <Suspense fallback={<HeartIcon className='m-2 animate-pulse' />}>
+            <LikeButtonContainer {...props} />
+        </Suspense>
     )
 }
-
-export { LikeButtonContainer as LikeButton }

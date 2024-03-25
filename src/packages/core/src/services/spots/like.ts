@@ -75,7 +75,7 @@ interface GetLikeInformationParameters {
 
 const defaultLikeInformation: SpotLikeInformation = {
     likedByUser: false,
-    likesCount: 0,
+    likeCount: 0,
 }
 
 export async function getLikeInformation({
@@ -107,7 +107,7 @@ export async function getLikeInformation({
                     likedByUser: {
                         $in: [userId, '$userIds'],
                     },
-                    likesCount: {
+                    likeCount: {
                         $size: '$userIds',
                     },
                 },
@@ -115,9 +115,9 @@ export async function getLikeInformation({
         ])
         .toArray()
 
-    const spotLikes = spotLikesArray.at(0)
+    const dbSpotLikes = spotLikesArray.at(0)
 
-    return spotLikes || defaultLikeInformation
+    return dbSpotLikes ? createSpotLikeInformation(dbSpotLikes) : defaultLikeInformation
 }
 
 
@@ -131,7 +131,7 @@ async function getLikeInformationForSpot(spotId: ObjectId) {
             },
             {
                 $project: {
-                    likesCount: {
+                    likeCount: {
                         $size: '$userIds',
                     },
                 },
@@ -146,7 +146,7 @@ async function getLikeInformationForSpot(spotId: ObjectId) {
 
     return {
         likedByUser: false,
-        likesCount: spotLikes.likesCount,
+        likeCount: spotLikes.likeCount,
     }
 
 }
@@ -173,4 +173,11 @@ function parseLikeIds({ spotId: spotIdParam, userId: userIdParam }: ParseLikeIds
 function throwParseError(methodName: string, entityName: string, value: string) {
     console.log(`like/${methodName} Wrong ${entityName} id were passed.`, value)
     throw new IdError(value, 'Id is not valid.')
+}
+
+function createSpotLikeInformation(dbSpotLikeInformation: SpotLikeInformation): SpotLikeInformation {
+    return {
+        likedByUser: dbSpotLikeInformation.likedByUser,
+        likeCount: dbSpotLikeInformation.likeCount,
+    }
 }

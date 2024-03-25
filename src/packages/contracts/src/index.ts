@@ -27,7 +27,7 @@ export interface SpotDescription extends Pick<Spot, 'id' | 'coordinate' | 'title
 
 export interface SpotLikeInformation {
     likedByUser: boolean
-    likesCount: number
+    likeCount: number
 }
 
 export interface SpotGroup {

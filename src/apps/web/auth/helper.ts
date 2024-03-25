@@ -1,3 +1,5 @@
+import { cache } from 'react'
+
 import type {
     Account,
     Provider,
@@ -35,8 +37,8 @@ export function getAccountUrl(account: Account) {
     return providerAccountLinkMap[account.provider](account)
 }
 
-export async function getAuthorizedUser() {
+export const getAuthorizedUser = cache(async () => {
     const session = await auth()
 
     return session?.user
-}
+})
