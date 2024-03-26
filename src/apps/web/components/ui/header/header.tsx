@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { getAuthorizedUser } from '@/auth/helper'
 import { cn } from '@/utils'
+import { buttonVariants } from '../button'
 
 import { MenuItems } from './menu-items/menu-items'
 import { Profile } from './profile'
@@ -26,7 +27,7 @@ export async function Header({ className }: HeaderProps) {
             <div className='flex items-center gap-2'>
                 {!isLoggedIn && (
                     <Link
-                        className='h-min'
+                        className={buttonVariants({ variant: 'outline' })}
                         href='/auth/sign-in'
                     >
                         Sign in

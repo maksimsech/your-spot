@@ -6,7 +6,10 @@ import {
 import { getSpot } from '@your-spot/core'
 
 import { getAuthorizedUser } from '@/auth/helper'
-import { canEditSpot } from '@/auth/rules/spots'
+import {
+    canDeleteSpot,
+    canEditSpot,
+} from '@/auth/rules/spots'
 import { SpotForm } from '@/components/spots/form'
 
 
@@ -32,9 +35,12 @@ export default async function Page({
         redirect('/')
     }
 
+    const showDeleteButton = canDeleteSpot(spot, user)
+
     return (
         <SpotForm
             spot={spot}
+            showDeleteButton={showDeleteButton}
         />
     )
 }
