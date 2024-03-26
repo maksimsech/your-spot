@@ -47,14 +47,14 @@ const formSchema = z.object({
 
 interface SpotFormProps {
     spot?: Spot
-    showDeleteButton: boolean
+    showDeleteButton?: boolean
     lat?: number
     lng?: number
 }
 
 export function SpotForm({
     spot,
-    showDeleteButton,
+    showDeleteButton = false,
     lat,
     lng,
 }: SpotFormProps) {
