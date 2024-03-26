@@ -10,11 +10,11 @@ import {
     stringToObjectId,
 } from '../common'
 
+
 interface LikeSpotArguments {
     spotId: string
     userId: string
 }
-
 
 export async function likeSpot(params: LikeSpotArguments) {
     const {
@@ -63,7 +63,6 @@ export async function removeSpotLike(params: RemoveSpotLikeArguments) {
             },
         },
     )
-
 
     return getLikeInformation(params)
 }
@@ -148,7 +147,6 @@ async function getLikeInformationForSpot(spotId: ObjectId) {
         likedByUser: false,
         likeCount: spotLikes.likeCount,
     }
-
 }
 
 interface ParseLikeIdsParameters {
