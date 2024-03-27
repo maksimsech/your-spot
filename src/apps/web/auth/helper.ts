@@ -42,3 +42,13 @@ export const getAuthorizedUser = cache(async () => {
 
     return session?.user
 })
+
+export async function ensureAuthenticated() {
+    const user = await getAuthorizedUser()
+    if (!user) {
+        // TODO: Custom exception?
+        throw new Error('Unauthorized')
+    }
+
+    return user
+}

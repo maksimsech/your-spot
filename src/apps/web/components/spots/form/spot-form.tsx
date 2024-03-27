@@ -1,17 +1,7 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-
 import type { Spot } from '@your-spot/contracts'
 
-import {
-    createSpot,
-    updateSpot,
-} from '@/actions/spots'
-import {useMap} from '@/components/map'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -24,26 +14,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/components/ui/toast'
 
 import { DeleteDialog } from './delete-dialog'
+import {
+    allowedFileTypes,
+    useSpotForm,
+} from './use-spot-form'
 
-
-const formSchema = z.object({
-    title: z
-        .string()
-        .min(5, {
-            message: 'Title must be at least 5 characters.',
-        })
-        .max(30, {
-            message: 'Maximum length of title is 30 characters.',
-        }),
-    description: z
-        .string()
-        .max(100, {
-            message: 'Maximum length of description is 100 characters.',
-        }),
-})
 
 interface SpotFormProps {
     spot?: Spot
@@ -58,48 +35,14 @@ export function SpotForm({
     lat,
     lng,
 }: SpotFormProps) {
-    const router = useRouter()
-    const { toast } = useToast()
-    const map = useMap()
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            title: spot?.title ?? '',
-            description: spot?.description ?? '',
-        },
+    const {
+        form,
+        handleSubmit,
+    } = useSpotForm({
+        spot,
+        lat,
+        lng,
     })
-
-    async function handleFormSubmit(values: z.infer<typeof formSchema>) {
-        if (spot) {
-            await updateSpot({
-                ...spot,
-                title: values.title,
-                description: values.description,
-            })
-
-            toast({
-                title: `${values.title} got updated!`,
-            })
-        } else {
-            await createSpot({
-                title: values.title,
-                description: values.description,
-                coordinate: {
-                    lat: lat!,
-                    lng: lng!,
-                },
-            })
-
-            toast({
-                title: `${values.title} created!`,
-                description: 'Thanks for new place. :)',
-            })
-        }
-
-        map?.refreshSpots()
-        router.push('/')
-    }
 
     const title = spot ? 'Edit spot' : 'New spot'
 
@@ -117,7 +60,7 @@ export function SpotForm({
             <Form {...form}>
                 <form
                     className='space-y-4'
-                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    onSubmit={handleSubmit}
                 >
                     <FormField
                         control={form.control}
@@ -151,10 +94,33 @@ export function SpotForm({
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name='image'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Image</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        onBlur={field.onBlur}
+                                        disabled={field.disabled}
+                                        name={field.name}
+                                        ref={field.ref}
+                                        placeholder='Upload your image'
+                                        type='file'
+                                        accept={allowedFileTypes.join(', ')}
+                                        onChange={e => {
+                                            field.onChange(e.target.files?.[0] || undefined)
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <Button type='submit'>Save</Button>
                 </form>
             </Form>
         </div>
-
     )
 }

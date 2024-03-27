@@ -7,6 +7,7 @@ const nextConfig = {
         '@your-spot/map',
         '@your-spot/map-types',
         '@your-spot/contracts',
+        '@your-spot/storage',
     ],
     experimental: {
         serverComponentsExternalPackages: [
