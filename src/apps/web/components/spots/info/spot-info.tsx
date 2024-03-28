@@ -10,6 +10,7 @@ import { canEditSpot } from '@/auth/rules/spots'
 import { buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { UserAvatar } from '@/components/users/user-avatar'
+import { SpotImage } from '../image'
 
 import { LikeButton } from './like-button'
 
@@ -60,8 +61,14 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
             <h2 className='self-center'>
                 {spot.title}
             </h2>
+            {spot.image && (
+                <SpotImage
+                    title={spot.title}
+                    image={spot.image}
+                />
+            )}
             <Separator />
-            <div className='mx-6'>
+            <div className='text-muted-foreground mx-6'>
                 {spot.description}
             </div>
         </div>

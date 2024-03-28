@@ -6,7 +6,11 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 import { buckets } from './buckets'
 import { s3 } from './client'
-import { publicImageUrlBase } from './env'
+import {
+    publicImageUrlHostname,
+    publicImageUrlProtocol,
+} from './env'
+
 
 export { buckets }
 
@@ -26,7 +30,6 @@ export async function getUploadUrl(bucketName: string, file: string) {
     }
 }
 
-
 export function getImageFullUrl(image: string) {
-    return `${publicImageUrlBase}${image}`
+    return `${publicImageUrlProtocol}://${publicImageUrlHostname}/${image}`
 }

@@ -17,6 +17,14 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: !!process.env['BUILD_NEXT_ESLINT_IGNORE'],
     },
+    images: {
+        remotePatterns: [{
+            protocol: process.env['STORAGE_PUBLIC_IMAGE_URL_PROTOCOL'],
+            hostname: process.env['STORAGE_PUBLIC_IMAGE_URL_HOSTNAME'],
+            port: '',
+            pathname: '/**',
+        }],
+    },
 }
 
 export default nextConfig
