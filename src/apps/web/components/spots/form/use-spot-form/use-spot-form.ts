@@ -1,11 +1,12 @@
+import { useState } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 
 import type { Spot } from '@your-spot/contracts'
 
-import { getImageUploadDetails } from '@/actions/image'
 import {
     createSpot,
     updateSpot,
@@ -13,6 +14,10 @@ import {
 import { useMap } from '@/components/map'
 import { useToast } from '@/components/ui/toast'
 
+import {
+    deleteImage,
+    uploadImage,
+} from './image'
 import { formSchema } from './schema'
 
 
@@ -20,18 +25,18 @@ interface UseSportFormParameters {
     spot?: Spot
     lat?: number
     lng?: number
-    onImageUploading: (percent: number) => void
 }
 
 export function useSpotForm({
     spot,
     lat,
     lng,
-    onImageUploading,
 }: UseSportFormParameters) {
     const router = useRouter()
     const { toast } = useToast()
     const map = useMap()
+
+    const [loadingProgress, setLoadingProgress] = useState(0)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -41,15 +46,11 @@ export function useSpotForm({
         },
     })
 
-    async function handleFormSubmit(values: z.infer<typeof formSchema>) {
-        if (spot) {
-            await handleUpdateSpot(values, spot)
-        } else {
-            await handleCreateSpot(values)
-        }
-
-        map?.refreshSpots()
-        router.push('/')
+    function showErrorToast() {
+        toast({
+            title: 'Error occurred!',
+            description: 'Please try again.',
+        })
     }
 
     async function handleUpdateSpot(values: z.infer<typeof formSchema>, spot: Spot) {
@@ -62,68 +63,46 @@ export function useSpotForm({
         toast({
             title: `${values.title} got updated!`,
         })
+
+        return true
     }
 
-    async function handleCreateSpot(values: z.infer<typeof formSchema>) {
+    async function handleCreateSpot(values: z.infer<typeof formSchema>, lat: number, lng: number) {
         // TODO: create job that weekly will check for image that are in cloudflare but not in db. (Or create better solution overall)
 
         const { image } = values
         if (image) {
-            let uploadUrl: string
-            let deleteUrl: string | undefined
-            try {
-                const details = await getImageUploadDetails(image.type)
-                uploadUrl = details.uploadUrl
-                deleteUrl = details.deleteUrl
-                const { imageUrl } = details
+            const result = await uploadImage(image, setLoadingProgress)
 
-                const xhr = new XMLHttpRequest()
-                const success = new Promise((resolve) => {
-                    xhr.upload.addEventListener('progress', (event) => {
-                        if (event.lengthComputable) {
-                            console.log('upload progress:', event.loaded / event.total)
-                        }
-                    })
-
-                    // TODO: Not needed.
-                    xhr.addEventListener('progress', (event) => {
-                        if (event.lengthComputable) {
-                            console.log('download progress:', event.loaded / event.total)
-                        }
-                    })
-
-                    xhr.addEventListener('loadend', () => {
-                        resolve(xhr.readyState === 4 && xhr.status === 200)
-                    })
-                    xhr.open('PUT', uploadUrl, true)
-                    xhr.setRequestHeader('Content-Type', image.type)
-                    xhr.send(image)
-                })
-
-                if (!success) {
-                    // TODO: Show error message
-                    return
+            if (!result.success) {
+                showErrorToast()
+                const { deleteUrl } = result
+                if (deleteUrl) {
+                    await deleteImage(deleteUrl)
                 }
+                return false
+            }
 
+            const {
+                imageUrl,
+                deleteUrl,
+            } = result
+
+            try {
                 await createSpot({
                     title: values.title,
                     description: values.description,
                     image: imageUrl,
                     coordinate: {
-                        lat: lat!,
-                        lng: lng!,
+                        lat,
+                        lng,
                     },
                 })
             }
-            catch {
-                if (deleteUrl) {
-                    // TODO: Show error message
-                    await fetch(deleteUrl, {
-                        method: 'DELETE',
-                    })
-                }
-                // console.log(uploadUrl)
-                return
+            catch (e: unknown) {
+                showErrorToast()
+                await deleteImage(deleteUrl)
+                return false
             }
         }
         else {
@@ -141,10 +120,31 @@ export function useSpotForm({
             title: `${values.title} created!`,
             description: 'Thanks for new place. :)',
         })
+
+        return true
+    }
+
+    async function handleFormSubmit(values: z.infer<typeof formSchema>) {
+        let success = false
+        if (spot) {
+            success = await handleUpdateSpot(values, spot)
+        } else {
+            if (!lat || !lng) {
+                router.push('/')
+                return
+            }
+            success = await handleCreateSpot(values, lat, lng)
+        }
+
+        if (success) {
+            map?.refreshSpots()
+            router.push('/')
+        }
     }
 
     return {
         form,
+        loadingProgress,
         handleSubmit: form.handleSubmit(handleFormSubmit),
     }
 }

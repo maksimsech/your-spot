@@ -13,6 +13,7 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {Progress} from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
 
 import { DeleteDialog } from './delete-dialog'
@@ -37,6 +38,7 @@ export function SpotForm({
 }: SpotFormProps) {
     const {
         form,
+        loadingProgress,
         handleSubmit,
     } = useSpotForm({
         spot,
@@ -45,6 +47,9 @@ export function SpotForm({
     })
 
     const title = spot ? 'Edit spot' : 'New spot'
+
+    const showImageInput = !spot
+    const { isSubmitting } = form.formState
 
     return (
         <div className='flex flex-col gap-y-6'>
@@ -69,7 +74,11 @@ export function SpotForm({
                             <FormItem>
                                 <FormLabel>Title</FormLabel>
                                 <FormControl>
-                                    <Input placeholder='Title' {...field} />
+                                    <Input
+                                        placeholder='Title'
+                                        {...field}
+                                        disabled={field.disabled || isSubmitting}
+                                    />
                                 </FormControl>
                                 <FormDescription>
                                     Spot title.
@@ -85,7 +94,11 @@ export function SpotForm({
                             <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                    <Textarea placeholder='Description' {...field} />
+                                    <Textarea
+                                        placeholder='Description'
+                                        {...field}
+                                        disabled={field.disabled || isSubmitting}
+                                    />
                                 </FormControl>
                                 <FormDescription>
                                     Spot description.
@@ -94,31 +107,41 @@ export function SpotForm({
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name='image'
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Image</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        onBlur={field.onBlur}
-                                        disabled={field.disabled}
-                                        name={field.name}
-                                        ref={field.ref}
-                                        placeholder='Upload your image'
-                                        type='file'
-                                        accept={allowedFileTypes.join(', ')}
-                                        onChange={e => {
-                                            field.onChange(e.target.files?.[0] || undefined)
-                                        }}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button type='submit'>Save</Button>
+                    {showImageInput && (
+                        <>
+                            <FormField
+                                control={form.control}
+                                name='image'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Image</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                onBlur={field.onBlur}
+                                                disabled={field.disabled || isSubmitting}
+                                                name={field.name}
+                                                ref={field.ref}
+                                                placeholder='Upload your image'
+                                                type='file'
+                                                accept={allowedFileTypes.join(', ')}
+                                                onChange={e => {
+                                                    field.onChange(e.target.files?.[0] || undefined)
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Progress value={loadingProgress} />
+                        </>
+                    )}
+                    <Button
+                        type='submit'
+                        disabled={isSubmitting}
+                    >
+                        Save
+                    </Button>
                 </form>
             </Form>
         </div>

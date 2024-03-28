@@ -1,7 +1,18 @@
 import { getImageUploadDetails } from '@/actions/image'
 
 
-export async function uploadImage(image: File, onImageUploading: (percent: number) => void) {
+type UploadImageResult =
+    | {
+        success: false
+        deleteUrl?: string
+    }
+    | {
+        success: true
+        imageUrl: string
+        deleteUrl: string
+    }
+
+export async function uploadImage(image: File, onImageUploading: (percent: number) => void): Promise<UploadImageResult> {
     let uploadUrl: string
     let deleteUrl: string | undefined
     let imageUrl: string | undefined
@@ -12,16 +23,15 @@ export async function uploadImage(image: File, onImageUploading: (percent: numbe
         imageUrl = details.imageUrl
 
         const xhr = new XMLHttpRequest()
-        const success = new Promise((resolve) => {
+        const success = await new Promise((resolve) => {
             xhr.upload.addEventListener('progress', (event) => {
                 if (event.lengthComputable) {
-                    console.log('upload progress:', event.loaded / event.total)
-                    onImageUploading(event.loaded / event.total)
+                    onImageUploading(event.loaded / event.total * 100)
                 }
             })
 
             xhr.addEventListener('loadend', () => {
-                onImageUploading(1)
+                onImageUploading(100)
                 resolve(xhr.readyState === 4 && xhr.status === 200)
             })
             xhr.open('PUT', uploadUrl, true)
@@ -49,4 +59,12 @@ export async function uploadImage(image: File, onImageUploading: (percent: numbe
         imageUrl,
         deleteUrl,
     }
+}
+
+export async function deleteImage(deleteUrl: string) {
+    const result = await fetch(deleteUrl, {
+        method: 'DELETE',
+    })
+
+    return result.ok
 }
