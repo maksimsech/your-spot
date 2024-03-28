@@ -50,3 +50,5 @@ export interface Account {
     providerAccountId: string
     userId: string
 }
+
+export * from './mimeTypes'

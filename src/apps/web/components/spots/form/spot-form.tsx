@@ -1,8 +1,12 @@
 'use client'
 
-import type { Spot } from '@your-spot/contracts'
+import {
+    imageTypes,
+    type Spot,
+} from '@your-spot/contracts'
 
 import { Button } from '@/components/ui/button'
+import { Dropzone } from '@/components/ui/dropzone'
 import {
     Form,
     FormControl,
@@ -13,13 +17,13 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {Progress} from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
 
 import { DeleteDialog } from './delete-dialog'
 import {
-    allowedFileTypes,
     useSpotForm,
+    maxFileSizeInMb,
 } from './use-spot-form'
 
 
@@ -62,9 +66,11 @@ export function SpotForm({
                     />
                 )}
             </div>
-            <Form {...form}>
+            <Form
+                {...form}
+            >
                 <form
-                    className='space-y-4'
+                    className='flex flex-col gap-2'
                     onSubmit={handleSubmit}
                 >
                     <FormField
@@ -116,16 +122,14 @@ export function SpotForm({
                                     <FormItem>
                                         <FormLabel>Image</FormLabel>
                                         <FormControl>
-                                            <Input
+                                            <Dropzone
                                                 onBlur={field.onBlur}
                                                 disabled={field.disabled || isSubmitting}
                                                 name={field.name}
-                                                ref={field.ref}
-                                                placeholder='Upload your image'
-                                                type='file'
-                                                accept={allowedFileTypes.join(', ')}
-                                                onChange={e => {
-                                                    field.onChange(e.target.files?.[0] || undefined)
+                                                maxFileSizeInMb={maxFileSizeInMb}
+                                                acceptedTypes={imageTypes}
+                                                onFilesChange={files => {
+                                                    field.onChange(files.at(0))
                                                 }}
                                             />
                                         </FormControl>
@@ -137,6 +141,8 @@ export function SpotForm({
                         </>
                     )}
                     <Button
+                        className='mt-2 self-center'
+                        size='lg'
                         type='submit'
                         disabled={isSubmitting}
                     >

@@ -1,9 +1,11 @@
 import { z } from 'zod'
 
+import { imageTypes } from '@your-spot/contracts'
 
-const maxFileSizeInMb = 5
+
+export const maxFileSizeInMb = 5
 const maxFileSize = 1024 * 1024 * maxFileSizeInMb
-export const allowedFileTypes = ['image/jpeg', 'image/png']
+const allowedFileTypes = Object.keys(imageTypes)
 const allowedFileTypesErrorMessage = 'Allowed image formats are jpeg, png'
 
 export const formSchema = z.object({
