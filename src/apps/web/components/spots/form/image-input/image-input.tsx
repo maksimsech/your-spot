@@ -3,9 +3,12 @@ import type {
     ReactNode,
 } from 'react'
 
+import { imageTypes } from '@your-spot/contracts'
+
 import { Button } from '@/components/ui/button'
 import { Dropzone } from '@/components/ui/dropzone'
 import { Progress } from '@/components/ui/progress'
+import { maxFileSizeInMb } from '../use-spot-form'
 
 
 interface ImageInputProps {
@@ -14,8 +17,6 @@ interface ImageInputProps {
     disabled?: boolean
     onBlur?: FocusEventHandler<HTMLInputElement>
     onFilesChange: (files: Array<File>) => void
-    maxFileSizeInMb?: number
-    acceptedTypes: Record<string, ReadonlyArray<string>>
     value?: File | string
     image?: ReactNode
     onEdit: () => void
@@ -28,15 +29,12 @@ export function ImageInput({
     disabled,
     onBlur,
     onFilesChange,
-    maxFileSizeInMb,
-    acceptedTypes,
     value,
     image,
     onEdit,
     onReset,
     ...restProps
 }: ImageInputProps) {
-    console.log(value)
     if (typeof value === 'string') {
         return (
             <>
@@ -64,7 +62,7 @@ export function ImageInput({
                 disabled={disabled}
                 name={name}
                 maxFileSizeInMb={maxFileSizeInMb}
-                acceptedTypes={acceptedTypes}
+                acceptedTypes={imageTypes}
                 onFilesChange={onFilesChange}
                 {...restProps}
             />

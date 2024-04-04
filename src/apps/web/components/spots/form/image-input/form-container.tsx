@@ -2,8 +2,6 @@ import type { ReactNode } from 'react'
 
 import type { ControllerRenderProps } from 'react-hook-form'
 
-import { imageTypes } from '@your-spot/contracts'
-
 import {
     FormControl,
     FormField,
@@ -11,7 +9,6 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
-import { maxFileSizeInMb } from '../use-spot-form'
 
 import { ImageInput } from './image-input'
 
@@ -43,8 +40,6 @@ export function FormContainer({
                             onBlur={field.onBlur}
                             disabled={field.disabled || disabled}
                             name={field.name}
-                            maxFileSizeInMb={maxFileSizeInMb}
-                            acceptedTypes={imageTypes}
                             loadingProgress={loadingProgress}
                             image={image}
                             onFilesChange={files =>
