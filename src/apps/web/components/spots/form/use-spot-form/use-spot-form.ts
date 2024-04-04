@@ -15,7 +15,10 @@ import {
     updateSpot,
 } from '@/actions/spots'
 import { useMap } from '@/components/map'
-import { useToast } from '@/components/ui/toast'
+import {
+    type Toast,
+    useToast,
+} from '@/components/ui/toast'
 
 import {
     deleteImage,
@@ -57,13 +60,12 @@ export function useSpotForm({
         })
     }
 
-    async function handleUpdateSpot(values: z.infer<typeof formSchema>, spot: Spot) {
-        await updateSpot({
-            ...spot,
-            title: values.title,
-            description: values.description,
-        })
-
+    // TODO: create job that weekly will check for image that are in cloudflare but not in db. (Or create better solution overall)
+    async function handleEdit(
+        values: z.infer<typeof formSchema>,
+        editMethod: (imageUrl?: string) => Promise<void>,
+        toastArgs: Toast,
+    ) {
         const { image } = values
         if (image && image instanceof File) {
             const result = await uploadImage(image, setLoadingProgress)
@@ -83,13 +85,7 @@ export function useSpotForm({
             } = result
 
             try {
-                await updateSpot({
-                    id: spot.id,
-                    title: values.title,
-                    description: values.description,
-                    authorId: spot.authorId,
-                    image: imageUrl,
-                })
+                await editMethod(imageUrl)
             }
             catch (e: unknown) {
                 showErrorToast()
@@ -98,74 +94,10 @@ export function useSpotForm({
             }
         }
         else {
-            await updateSpot({
-                id: spot.id,
-                title: values.title,
-                description: values.description,
-                authorId: spot.authorId,
-            })
+            await editMethod()
         }
 
-        toast({
-            title: `${values.title} got updated!`,
-        })
-
-        return true
-    }
-
-    async function handleCreateSpot(values: z.infer<typeof formSchema>, lat: number, lng: number) {
-        // TODO: create job that weekly will check for image that are in cloudflare but not in db. (Or create better solution overall)
-
-        const { image } = values
-        if (image && image instanceof File) {
-            const result = await uploadImage(image, setLoadingProgress)
-
-            if (!result.success) {
-                showErrorToast()
-                const { deleteUrl } = result
-                if (deleteUrl) {
-                    await deleteImage(deleteUrl)
-                }
-                return false
-            }
-
-            const {
-                imageUrl,
-                deleteUrl,
-            } = result
-
-            try {
-                await createSpot({
-                    title: values.title,
-                    description: values.description,
-                    image: imageUrl,
-                    coordinate: {
-                        lat,
-                        lng,
-                    },
-                })
-            }
-            catch (e: unknown) {
-                showErrorToast()
-                await deleteImage(deleteUrl)
-                return false
-            }
-        }
-        else {
-            await createSpot({
-                title: values.title,
-                description: values.description,
-                coordinate: {
-                    lat: lat!,
-                    lng: lng!,
-                },
-            })
-        }
-
-        toast({
-            title: `${values.title} created!`,
-            description: 'Thanks for new place. :)',
-        })
+        toast(toastArgs)
 
         return true
     }
@@ -173,13 +105,40 @@ export function useSpotForm({
     async function handleFormSubmit(values: z.infer<typeof formSchema>) {
         let success = false
         if (spot) {
-            success = await handleUpdateSpot(values, spot)
+            success = await handleEdit(
+                values,
+                (imageUrl) => updateSpot({
+                    id: spot.id,
+                    title: values.title,
+                    description: values.description,
+                    authorId: spot.authorId,
+                    image: imageUrl,
+                }),
+                {
+                    title: `${values.title} got updated!`,
+                },
+            )
         } else {
             if (!lat || !lng) {
                 router.push('/')
                 return
             }
-            success = await handleCreateSpot(values, lat, lng)
+            success = await handleEdit(
+                values,
+                (imageUrl) => createSpot({
+                    title: values.title,
+                    description: values.description,
+                    image: imageUrl,
+                    coordinate: {
+                        lat,
+                        lng,
+                    },
+                }),
+                {
+                    title: `${values.title} created!`,
+                    description: 'Thanks for new place. :)',
+                },
+            )
         }
 
         if (success) {

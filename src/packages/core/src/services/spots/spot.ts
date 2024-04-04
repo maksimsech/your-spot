@@ -3,7 +3,10 @@ import {
     type WithId,
     type Spot as DbSpot,
     spotCollection,
+    client,
+    spotLikesCollection,
 } from '@your-spot/database'
+import { deleteImage } from '@your-spot/storage'
 
 import { IdError } from '../../errors/id-error'
 import {
@@ -43,12 +46,24 @@ export async function deleteSpot(spotId: string) {
 
     const objectId = stringToObjectId(spotId)
 
-    await spotCollection.deleteOne({
-        _id: objectId,
-    })
+    const session = client.startSession()
+    try {
+        await session.withTransaction(async () => {
+            await spotCollection.deleteOne({
+                _id: objectId,
+            })
+
+            await spotLikesCollection.deleteOne({
+                spotId: objectId,
+            })
+        })
+    }
+    finally {
+        await session.endSession()
+    }
 }
 
-export async function updateSpot(spot: Spot) {
+export async function updateSpot(spot: Pick<Spot, 'id' | 'title' | 'description' | 'image'>) {
     if (isNotValid(spot.id)) {
         console.log('spot/updateSpot Wrong id were passed.', spot)
         throw new IdError(spot.id, 'Id is not valid.')
@@ -56,16 +71,24 @@ export async function updateSpot(spot: Spot) {
 
     const objectId = stringToObjectId(spot.id)
 
-    await spotCollection.updateOne({
+    const originalSpot = await spotCollection.findOneAndUpdate({
         _id: objectId,
     }, {
         $set: {
             title: spot.title,
             description: spot.description,
+            image: spot.image,
         },
     }, {
         upsert: false,
+        returnDocument: 'before',
     })
+
+    console.log('originalSpot', originalSpot)
+    console.log('spot', spot)
+    if (!!originalSpot?.image && !!spot.image && originalSpot?.image !== spot.image) {
+        await deleteImage(originalSpot.image)
+    }
 }
 
 export async function getSpot(spotId: string) {

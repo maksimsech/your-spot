@@ -32,10 +32,10 @@ export async function getUploadUrl(bucketName: string, file: string) {
 }
 
 export function getImageFullUrl(image: string) {
-    return `${escapeStringForRegex(publicImageUrlProtocol)}://${escapeStringForRegex(publicImageUrlHostname)}/${image}`
+    return `${publicImageUrlProtocol}://${publicImageUrlHostname}/${image}`
 }
 
-const regex = new RegExp(`^${publicImageUrlProtocol}\:\/\/${publicImageUrlHostname}\/(.*)$`, 'gm')
+const regex = new RegExp(`^${escapeStringForRegex(publicImageUrlProtocol)}\:\/\/${escapeStringForRegex(publicImageUrlHostname)}\/(.*)$`, 'gm')
 export async function deleteImage(imageFullUrl: string) {
     const key = regex.exec(imageFullUrl)?.at(1)
     if (!key) {

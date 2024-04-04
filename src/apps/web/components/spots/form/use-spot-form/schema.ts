@@ -6,7 +6,6 @@ import { imageTypes } from '@your-spot/contracts'
 export const maxFileSizeInMb = 5
 const maxFileSize = 1024 * 1024 * maxFileSizeInMb
 const allowedFileTypes = Object.keys(imageTypes)
-const allowedFileTypesErrorMessage = 'Allowed image formats are jpeg, png'
 
 export const formSchema = z.object({
     title: z
@@ -23,13 +22,12 @@ export const formSchema = z.object({
             message: 'Maximum length of description is 100 characters.',
         }),
     image: z
-        .nullable(
-            z.union([
-                z.instanceof(File)
-                    .refine(f => (f.length ?? 1) === 1, 'Only one file is allowed.')
-                    .refine(f => f.size < maxFileSize, `Maximum file size is ${maxFileSizeInMb} MB.`)
-                    .refine(f => allowedFileTypes.includes(f.type), allowedFileTypesErrorMessage),
-                z.string(),
-            ]),
-        ),
+        .union([
+            z.instanceof(File)
+                .refine(f => (f.length ?? 1) === 1, 'Only one file is allowed.')
+                .refine(f => f.size < maxFileSize, `Maximum file size is ${maxFileSizeInMb} MB.`)
+                .refine(f => allowedFileTypes.includes(f.type), 'Allowed image formats are jpeg, png'),
+            z.string(),
+            z.null(),
+        ]),
 })
