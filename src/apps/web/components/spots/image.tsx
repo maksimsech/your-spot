@@ -1,6 +1,6 @@
-import { headers } from 'next/headers'
 import Image from 'next/image'
-import { userAgent } from 'next/server'
+
+import { isMobileClient } from '@/utils/server'
 
 
 // TODO: Revisit this logic
@@ -15,22 +15,23 @@ const desktopSize = {
 } as const
 
 interface SpotImageProps {
+    className?: string
     image: string
     title: string
 }
 
-export function SpotImage({ image, title }: SpotImageProps) {
-    const { device } = userAgent({
-        headers: headers(),
-    })
-
-    const size = device.type === 'mobile'
+export function SpotImage({
+    className,
+    image,
+    title,
+}: SpotImageProps) {
+    const size = isMobileClient()
         ? mobileSize
         : desktopSize
 
     return (
         <Image
-            className=' self-center'
+            className={className}
             src={image}
             alt={`${title} image`}
             {...size}

@@ -32,6 +32,7 @@ import {
     MapLoader,
 } from './leaflet-map'
 
+
 export interface MapProps {
     setMapContext: (context: MapContext) => void
     className?: string

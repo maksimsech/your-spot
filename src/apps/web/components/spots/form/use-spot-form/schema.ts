@@ -23,10 +23,13 @@ export const formSchema = z.object({
             message: 'Maximum length of description is 100 characters.',
         }),
     image: z
-        .optional(
-            z.instanceof(File)
-                .refine(f => (f.length ?? 1) === 1, 'Only one file is allowed.')
-                .refine(f => f.size < maxFileSize, `Maximum file size is ${maxFileSizeInMb} MB.`)
-                .refine(f => allowedFileTypes.includes(f.type), allowedFileTypesErrorMessage),
+        .nullable(
+            z.union([
+                z.instanceof(File)
+                    .refine(f => (f.length ?? 1) === 1, 'Only one file is allowed.')
+                    .refine(f => f.size < maxFileSize, `Maximum file size is ${maxFileSizeInMb} MB.`)
+                    .refine(f => allowedFileTypes.includes(f.type), allowedFileTypesErrorMessage),
+                z.string(),
+            ]),
         ),
 })

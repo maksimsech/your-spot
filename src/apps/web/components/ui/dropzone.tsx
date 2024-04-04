@@ -4,6 +4,7 @@ import {
     type InputHTMLAttributes,
     useState,
     useCallback,
+    useMemo,
 } from 'react'
 
 import { Cross1Icon } from '@radix-ui/react-icons'
@@ -22,7 +23,7 @@ interface DropzoneProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 interface ListFile {
-    name: string
+    file: File
     id: number
 }
 
@@ -40,7 +41,7 @@ export function Dropzone({
     const onDrop = useCallback((files: File[]) => {
         onFilesChange(files)
         setToUpload(files.map(f => ({
-            name: f.name,
+            file: f,
             id: Math.random(),
         })))
     }, [onFilesChange])
@@ -55,7 +56,10 @@ export function Dropzone({
         onDrop,
     })
 
-    const acceptedFileTypes = [...new Set(Object.values(acceptedTypes).flat())].join(', ')
+    const acceptedFileTypes = useMemo(
+        () => [...new Set(Object.values(acceptedTypes).flat())].join(', '),
+        [acceptedTypes],
+    )
 
     return (
         <div className='flex flex-col gap-2'>
@@ -86,12 +90,12 @@ export function Dropzone({
                             key={f.id}
                             className='flex items-center justify-between p-2'
                         >
-                            <span>{f.name}</span>
+                            <span>{f.file.name}</span>
                             <Button
                                 className='p-2'
                                 variant='ghost'
                                 onClick={() => {
-                                    setToUpload(toUpload.toSpliced(i, 1))
+                                    onDrop(toUpload.map(f => f.file).toSpliced(i, 1))
                                 }}
                             >
                                 <Cross1Icon />

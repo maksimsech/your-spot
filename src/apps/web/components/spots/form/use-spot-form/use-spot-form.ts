@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import {
+    useMemo,
+    useState,
+} from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -43,6 +46,7 @@ export function useSpotForm({
         defaultValues: {
             title: spot?.title ?? '',
             description: spot?.description ?? '',
+            image: spot?.image ?? null,
         },
     })
 
@@ -71,7 +75,7 @@ export function useSpotForm({
         // TODO: create job that weekly will check for image that are in cloudflare but not in db. (Or create better solution overall)
 
         const { image } = values
-        if (image) {
+        if (image && image instanceof File) {
             const result = await uploadImage(image, setLoadingProgress)
 
             if (!result.success) {
@@ -142,9 +146,17 @@ export function useSpotForm({
         }
     }
 
+    const handleResetImage = useMemo(
+        () => spot?.image
+            ? () => form.resetField('image')
+            : undefined,
+        [form, spot],
+    )
+
     return {
         form,
         loadingProgress,
         handleSubmit: form.handleSubmit(handleFormSubmit),
+        handleResetImage,
     }
 }

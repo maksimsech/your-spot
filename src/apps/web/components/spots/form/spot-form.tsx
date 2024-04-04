@@ -1,37 +1,32 @@
 'use client'
 
-import {
-    imageTypes,
-    type Spot,
-} from '@your-spot/contracts'
+import type { ReactNode } from 'react'
+
+import type { Spot } from '@your-spot/contracts'
 
 import { Button } from '@/components/ui/button'
-import { Dropzone } from '@/components/ui/dropzone'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
 
 import { DeleteDialog } from './delete-dialog'
-import {
-    useSpotForm,
-    maxFileSizeInMb,
-} from './use-spot-form'
+import { ImageInput } from './image-input'
+import { useSpotForm } from './use-spot-form'
 
 
-interface SpotFormProps {
+export interface SpotFormProps {
     spot?: Spot
     showDeleteButton?: boolean
     lat?: number
     lng?: number
+    image?: ReactNode
 }
 
 export function SpotForm({
@@ -39,11 +34,13 @@ export function SpotForm({
     showDeleteButton = false,
     lat,
     lng,
+    image,
 }: SpotFormProps) {
     const {
         form,
         loadingProgress,
         handleSubmit,
+        handleResetImage,
     } = useSpotForm({
         spot,
         lat,
@@ -52,7 +49,6 @@ export function SpotForm({
 
     const title = spot ? 'Edit spot' : 'New spot'
 
-    const showImageInput = !spot
     const { isSubmitting } = form.formState
 
     return (
@@ -86,9 +82,6 @@ export function SpotForm({
                                         disabled={field.disabled || isSubmitting}
                                     />
                                 </FormControl>
-                                <FormDescription>
-                                    Spot title.
-                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -106,43 +99,18 @@ export function SpotForm({
                                         disabled={field.disabled || isSubmitting}
                                     />
                                 </FormControl>
-                                <FormDescription>
-                                    Spot description.
-                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    {showImageInput && (
-                        <>
-                            <FormField
-                                control={form.control}
-                                name='image'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Image</FormLabel>
-                                        <FormControl>
-                                            <Dropzone
-                                                onBlur={field.onBlur}
-                                                disabled={field.disabled || isSubmitting}
-                                                name={field.name}
-                                                maxFileSizeInMb={maxFileSizeInMb}
-                                                acceptedTypes={imageTypes}
-                                                onFilesChange={files => {
-                                                    field.onChange(files.at(0))
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Progress value={loadingProgress} />
-                        </>
-                    )}
+                    <ImageInput
+                        loadingProgress={loadingProgress}
+                        disabled={isSubmitting}
+                        image={image}
+                        onReset={handleResetImage}
+                    />
                     <Button
-                        className='mt-2 self-center'
-                        size='lg'
+                        className='mt-3 w-full self-center'
                         type='submit'
                         disabled={isSubmitting}
                     >

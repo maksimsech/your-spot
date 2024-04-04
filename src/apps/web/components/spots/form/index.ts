@@ -1,1 +1,1 @@
-export * from './spot-form'
+export { ImageContainer as SpotForm } from './image-container'
