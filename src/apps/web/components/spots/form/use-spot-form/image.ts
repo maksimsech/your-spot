@@ -17,7 +17,7 @@ export async function uploadImage(image: File, onImageUploading: (percent: numbe
     let deleteUrl: string | undefined
     let imageUrl: string | undefined
     try {
-        const details = await getImageUploadDetails(image.type)
+        const details = await getImageUploadDetails(image.name, image.type)
         uploadUrl = details.uploadUrl
         deleteUrl = details.deleteUrl
         imageUrl = details.imageUrl

@@ -1,5 +1,6 @@
 'use server'
 
+import { imageTypes } from '@your-spot/contracts'
 import {
     buckets,
     getUploadUrl,
@@ -9,12 +10,13 @@ import {
 import { ensureAuthenticated } from '@/auth/helper'
 
 
-export async function getImageUploadDetails(mimeType: string) {
+export async function getImageUploadDetails(originalFileName: string, mimeType: string) {
     await ensureAuthenticated()
 
     const imageId = crypto.randomUUID()
-    const extension = getExtension(mimeType)
-    const image = `${imageId}.${extension}`
+    const originalFileExtension = originalFileName.split('.').pop()
+    const extension = `.${originalFileExtension}` || getExtension(mimeType)
+    const image = `${imageId}${extension}`
 
     const {
         putUrl,
@@ -28,11 +30,11 @@ export async function getImageUploadDetails(mimeType: string) {
     }
 }
 
-// TODO: Mapping only allowed from schema file. Refactor
 function getExtension(mime: string) {
-    switch (mime) {
-    case 'image/jpeg': return 'jpeg'
-    case 'image/png': return 'png'
-    default: throw new Error('Unknown mime type')
+    const mimeExtensions = (imageTypes as Record<string, ReadonlyArray<string>>)[mime]
+    if (!mimeExtensions) {
+        throw new Error('Unknown mime type')
     }
+
+    return mimeExtensions[0]
 }
