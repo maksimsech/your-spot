@@ -7,6 +7,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { buckets } from './buckets'
 import { s3 } from './client'
 import {
+    imageBucketName,
     publicImageUrlHostname,
     publicImageUrlProtocol,
 } from './env'
@@ -31,5 +32,21 @@ export async function getUploadUrl(bucketName: string, file: string) {
 }
 
 export function getImageFullUrl(image: string) {
-    return `${publicImageUrlProtocol}://${publicImageUrlHostname}/${image}`
+    return `${escapeStringForRegex(publicImageUrlProtocol)}://${escapeStringForRegex(publicImageUrlHostname)}/${image}`
+}
+
+const regex = new RegExp(`^${publicImageUrlProtocol}\:\/\/${publicImageUrlHostname}\/(.*)$`, 'gm')
+export async function deleteImage(imageFullUrl: string) {
+    const key = regex.exec(imageFullUrl)?.at(1)
+    if (!key) {
+        throw new Error('Provided url isn\'t correct.')
+    }
+
+    const deleteCommand = new DeleteObjectCommand({ Bucket: imageBucketName, Key: key })
+
+    await s3.send(deleteCommand)
+}
+
+function escapeStringForRegex(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }

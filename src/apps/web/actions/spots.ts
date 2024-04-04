@@ -38,9 +38,11 @@ export async function createSpot(spot: Omit<Spot, 'id' | 'authorId'>) {
     await createSpotCore(spotWithAuthorId)
 }
 
-export async function updateSpot(spot: Spot) {
+export async function updateSpot(spot: Parameters<typeof updateSpotCore>[0] & Pick<Spot, 'authorId'>) {
     const user = await ensureAuthenticated()
 
+    // TODO: Isn't really security because we trust authorId from our front.
+    // Technically everything might be there.
     if (!canEditSpot(spot, user)) {
         return
     }

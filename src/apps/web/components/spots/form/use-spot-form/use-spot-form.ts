@@ -64,6 +64,48 @@ export function useSpotForm({
             description: values.description,
         })
 
+        const { image } = values
+        if (image && image instanceof File) {
+            const result = await uploadImage(image, setLoadingProgress)
+
+            if (!result.success) {
+                showErrorToast()
+                const { deleteUrl } = result
+                if (deleteUrl) {
+                    await deleteImage(deleteUrl)
+                }
+                return false
+            }
+
+            const {
+                imageUrl,
+                deleteUrl,
+            } = result
+
+            try {
+                await updateSpot({
+                    id: spot.id,
+                    title: values.title,
+                    description: values.description,
+                    authorId: spot.authorId,
+                    image: imageUrl,
+                })
+            }
+            catch (e: unknown) {
+                showErrorToast()
+                await deleteImage(deleteUrl)
+                return false
+            }
+        }
+        else {
+            await updateSpot({
+                id: spot.id,
+                title: values.title,
+                description: values.description,
+                authorId: spot.authorId,
+            })
+        }
+
         toast({
             title: `${values.title} got updated!`,
         })
