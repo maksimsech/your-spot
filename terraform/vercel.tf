@@ -6,17 +6,17 @@ resource "vercel_project" "this" {
   ignore_command  = "exit 0"
   install_command = " "
 
+  serverless_function_region = "fra1"
+
   vercel_authentication = {
     deployment_type = "standard_protection"
   }
 }
 
-resource "vercel_project_domain" "dev" {
+resource "vercel_project_domain" "this" {
   project_id = vercel_project.this.id
-  domain     = "your-spot-dev.vercel.app"
+
+  for_each = { for domain in var.vercel_project_domains : domain => domain }
+  domain   = each.key
 }
 
-resource "vercel_project_domain" "prod" {
-  project_id = vercel_project.this.id
-  domain     = "your-spot.vercel.app"
-}
