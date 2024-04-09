@@ -91,10 +91,9 @@ async function createMongoClient(env: Env) {
 async function getLatestRun(kvNamespace: KVNamespace<string>) {
     const latestRunString = await kvNamespace.get(latestRunKey)
     if (!latestRunString) {
-        await kvNamespace.put(latestRunKey, Date.now().toString())
         return null
     }
-    return new Date(parseInt(latestRunKey, 10))
+    return new Date(parseInt(latestRunString, 10))
 }
 
 async function getSpotsAndImages(
@@ -194,6 +193,10 @@ function getStoragePrefixesBetweenDateAndToday(date: Date) {
     const dates = []
     const currentDate = new Date(date)
     const endDate = new Date(Date.now())
+    endDate.setHours(23)
+    endDate.setMinutes(59)
+    endDate.setSeconds(59)
+    endDate.setMilliseconds(999)
 
     while (currentDate <= endDate) {
         dates.push(formatDate(currentDate))
