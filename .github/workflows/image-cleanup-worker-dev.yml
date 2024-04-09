@@ -20,6 +20,10 @@ jobs:
             run:
                 working-directory: ./src
         steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version-file: 'src/.nvmrc'
             - name: Install packages
               run: npm ci
             - name: Run ESLint
