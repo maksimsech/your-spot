@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { getAuthorizedUser } from '@/auth/helper'
+import { getAuthenticatedUser } from '@/auth/helper'
 import { cn } from '@/utils'
 import { buttonVariants } from '../button'
 
@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 export async function Header({ className }: HeaderProps) {
-    const user = await getAuthorizedUser()
+    const user = await getAuthenticatedUser()
 
     const isLoggedIn = !!user
 

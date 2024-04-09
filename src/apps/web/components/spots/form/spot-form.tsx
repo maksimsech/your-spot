@@ -1,22 +1,13 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import type { ReactNode } from 'react'
 
 import type { Spot } from '@your-spot/contracts'
 
-import {
-    createSpot,
-    updateSpot,
-} from '@/actions/spots'
-import {useMap} from '@/components/map'
 import { Button } from '@/components/ui/button'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -24,32 +15,18 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/components/ui/toast'
 
 import { DeleteDialog } from './delete-dialog'
+import { ImageInput } from './image-input'
+import { useSpotForm } from './use-spot-form'
 
 
-const formSchema = z.object({
-    title: z
-        .string()
-        .min(5, {
-            message: 'Title must be at least 5 characters.',
-        })
-        .max(30, {
-            message: 'Maximum length of title is 30 characters.',
-        }),
-    description: z
-        .string()
-        .max(100, {
-            message: 'Maximum length of description is 100 characters.',
-        }),
-})
-
-interface SpotFormProps {
+export interface SpotFormProps {
     spot?: Spot
     showDeleteButton?: boolean
     lat?: number
     lng?: number
+    image?: ReactNode
 }
 
 export function SpotForm({
@@ -57,51 +34,22 @@ export function SpotForm({
     showDeleteButton = false,
     lat,
     lng,
+    image,
 }: SpotFormProps) {
-    const router = useRouter()
-    const { toast } = useToast()
-    const map = useMap()
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            title: spot?.title ?? '',
-            description: spot?.description ?? '',
-        },
+    const {
+        form,
+        loadingProgress,
+        handleSubmit,
+        handleResetImage,
+    } = useSpotForm({
+        spot,
+        lat,
+        lng,
     })
 
-    async function handleFormSubmit(values: z.infer<typeof formSchema>) {
-        if (spot) {
-            await updateSpot({
-                ...spot,
-                title: values.title,
-                description: values.description,
-            })
-
-            toast({
-                title: `${values.title} got updated!`,
-            })
-        } else {
-            await createSpot({
-                title: values.title,
-                description: values.description,
-                coordinate: {
-                    lat: lat!,
-                    lng: lng!,
-                },
-            })
-
-            toast({
-                title: `${values.title} created!`,
-                description: 'Thanks for new place. :)',
-            })
-        }
-
-        map?.refreshSpots()
-        router.push('/')
-    }
-
     const title = spot ? 'Edit spot' : 'New spot'
+
+    const { isSubmitting } = form.formState
 
     return (
         <div className='flex flex-col gap-y-6'>
@@ -114,10 +62,12 @@ export function SpotForm({
                     />
                 )}
             </div>
-            <Form {...form}>
+            <Form
+                {...form}
+            >
                 <form
-                    className='space-y-4'
-                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    className='flex flex-col gap-2'
+                    onSubmit={handleSubmit}
                 >
                     <FormField
                         control={form.control}
@@ -126,11 +76,12 @@ export function SpotForm({
                             <FormItem>
                                 <FormLabel>Title</FormLabel>
                                 <FormControl>
-                                    <Input placeholder='Title' {...field} />
+                                    <Input
+                                        placeholder='Title'
+                                        {...field}
+                                        disabled={field.disabled || isSubmitting}
+                                    />
                                 </FormControl>
-                                <FormDescription>
-                                    Spot title.
-                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -142,19 +93,31 @@ export function SpotForm({
                             <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                    <Textarea placeholder='Description' {...field} />
+                                    <Textarea
+                                        placeholder='Description'
+                                        {...field}
+                                        disabled={field.disabled || isSubmitting}
+                                    />
                                 </FormControl>
-                                <FormDescription>
-                                    Spot description.
-                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <Button type='submit'>Save</Button>
+                    <ImageInput
+                        loadingProgress={loadingProgress}
+                        disabled={isSubmitting}
+                        image={image}
+                        onReset={handleResetImage}
+                    />
+                    <Button
+                        className='mt-3 w-full self-center'
+                        type='submit'
+                        disabled={isSubmitting}
+                    >
+                        Save
+                    </Button>
                 </form>
             </Form>
         </div>
-
     )
 }

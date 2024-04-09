@@ -19,7 +19,7 @@ import {
     removeSpotLike as removeSpotLikeCore,
 } from '@your-spot/core/services'
 
-import { getAuthorizedUser } from '@/auth/helper'
+import { ensureAuthenticated } from '@/auth/helper'
 import {
     canDeleteSpot,
     canEditSpot,
@@ -27,11 +27,8 @@ import {
 import { getSpotCacheTag } from '@/cache/spots'
 
 
-export async function createSpot(spot: Omit<Spot, 'id' | 'authorId'>) {
-    const user = await getAuthorizedUser()
-    if (!user) {
-        throw Error('Not authenticated')
-    }
+export async function createSpot(spot: Omit<Parameters<typeof createSpotCore>[0], 'authorId'>) {
+    const user = await ensureAuthenticated()
 
     const spotWithAuthorId = {
         ...spot,
@@ -41,12 +38,11 @@ export async function createSpot(spot: Omit<Spot, 'id' | 'authorId'>) {
     await createSpotCore(spotWithAuthorId)
 }
 
-export async function updateSpot(spot: Spot) {
-    const user = await getAuthorizedUser()
-    if (!user) {
-        return
-    }
+export async function updateSpot(spot: Parameters<typeof updateSpotCore>[0] & Pick<Spot, 'authorId'>) {
+    const user = await ensureAuthenticated()
 
+    // TODO: Isn't really security because we trust authorId from our front.
+    // Technically everything might be there.
     if (!canEditSpot(spot, user)) {
         return
     }
@@ -57,16 +53,15 @@ export async function updateSpot(spot: Spot) {
 }
 
 export async function deleteSpot(spotId: string) {
-    const user = await getAuthorizedUser()
-    if (!user) {
-        return
-    }
+    const user = await ensureAuthenticated()
 
     const spot = await getSpotCore(spotId)
     if (!spot) {
         return
     }
 
+    // TODO: Isn't really security because we trust authorId from our front.
+    // Technically everything might be there.
     if (!canDeleteSpot(spot, user)) {
         return
     }

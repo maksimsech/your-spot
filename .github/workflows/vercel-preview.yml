@@ -12,6 +12,7 @@ on:
             - main
         paths:
             - "src/**"
+            - "!src/apps/image-cleanup-worker/**"
 
 jobs:
     buildAndDeploy:

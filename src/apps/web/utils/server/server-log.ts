@@ -1,5 +1,3 @@
-import 'server-only'
-
 import { notReachable } from '@/types/non-reachable'
 
 

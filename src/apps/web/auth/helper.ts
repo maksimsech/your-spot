@@ -37,8 +37,18 @@ export function getAccountUrl(account: Account) {
     return providerAccountLinkMap[account.provider](account)
 }
 
-export const getAuthorizedUser = cache(async () => {
+export const getAuthenticatedUser = cache(async () => {
     const session = await auth()
 
     return session?.user
 })
+
+export async function ensureAuthenticated() {
+    const user = await getAuthenticatedUser()
+    if (!user) {
+        // TODO: Custom exception?
+        throw new Error('Unauthorized')
+    }
+
+    return user
+}

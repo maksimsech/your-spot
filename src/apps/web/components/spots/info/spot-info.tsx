@@ -5,11 +5,12 @@ import type {
     User,
 } from '@your-spot/contracts'
 
-import { getAuthorizedUser } from '@/auth/helper'
+import { getAuthenticatedUser } from '@/auth/helper'
 import { canEditSpot } from '@/auth/rules/spots'
 import { buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { UserAvatar } from '@/components/users/user-avatar'
+import { SpotImage } from '../image'
 
 import { LikeButton } from './like-button'
 
@@ -21,12 +22,12 @@ interface SpotInfoProps {
 
 export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
     // TODO: Revisit this with proper authorization
-    const user = await getAuthorizedUser()
+    const user = await getAuthenticatedUser()
 
     const showEdit = user && canEditSpot(spot, user)
 
     return (
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col gap-4'>
             {spotAuthor && (
                 <div className='flex items-center justify-between'>
                     <div className='flex gap-2'>
@@ -60,8 +61,16 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
             <h2 className='self-center'>
                 {spot.title}
             </h2>
+            <div className='self-center'>
+                {spot.image && (
+                    <SpotImage
+                        title={spot.title}
+                        image={spot.image}
+                    />
+                )}
+            </div>
             <Separator />
-            <div className='mx-6'>
+            <div className='text-muted-foreground mx-6'>
                 {spot.description}
             </div>
         </div>

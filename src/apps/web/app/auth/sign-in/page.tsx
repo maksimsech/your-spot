@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { config } from '@your-spot/auth'
 
-import { getAuthorizedUser } from '@/auth/helper'
+import { getAuthenticatedUser } from '@/auth/helper'
 import { Logo } from '@/components/auth/logo'
 import { Separator } from '@/components/ui/separator'
 
@@ -37,7 +37,7 @@ interface PageProps {
 export default async function Page({
     searchParams,
 }: PageProps) {
-    const user = await getAuthorizedUser()
+    const user = await getAuthenticatedUser()
     if (user) {
         redirect('/')
     }

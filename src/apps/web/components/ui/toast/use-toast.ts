@@ -197,4 +197,5 @@ function useToast() {
 export {
     useToast,
     toast,
+    type Toast,
 }

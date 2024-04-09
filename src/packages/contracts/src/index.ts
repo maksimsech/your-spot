@@ -17,6 +17,8 @@ export interface Spot {
     image?: string
     coordinate: Coordinate
     authorId: string | null
+    createdAt: Date
+    updatedAt?: Date
 }
 
 export interface SpotCoordinates extends Pick<Spot, 'id' | 'coordinate'> {
@@ -50,3 +52,5 @@ export interface Account {
     providerAccountId: string
     userId: string
 }
+
+export * from './mimeTypes'

@@ -5,7 +5,7 @@ import {
 
 import { getLikeInformation } from '@your-spot/core'
 
-import { getAuthorizedUser } from '@/auth/helper'
+import { getAuthenticatedUser } from '@/auth/helper'
 
 import { LikeButton } from './like-button'
 
@@ -15,7 +15,7 @@ interface LikeButtonContainerProps {
 }
 
 async function LikeButtonContainer({ spotId }: LikeButtonContainerProps) {
-    const user = await getAuthorizedUser()
+    const user = await getAuthenticatedUser()
     const userId = user?.id || null
 
     const likeInformation = await getLikeInformation({
