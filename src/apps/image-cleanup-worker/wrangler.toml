@@ -1,0 +1,21 @@
+name = "image-cleanup-worker"
+main = "src/index.ts"
+compatibility_date = "2024-04-05"
+
+[placement]
+mode = "smart"
+
+[triggers]
+crons = [
+    "0 0 */5 * *",
+] # At 12:00 AM, every 5 days, starting on day of the month
+
+[vars]
+
+[[kv_namespaces]]
+binding = "KV_NAMESPACE"
+id = "9c3114f7ea574dfca0711698d78baba3"
+
+[[r2_buckets]]
+binding = "IMAGE_BUCKET"
+bucket_name = "yourspot-dev"
