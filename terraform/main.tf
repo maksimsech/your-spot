@@ -14,6 +14,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5"
     }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.29.0"
+    }
   }
 
   cloud {
@@ -83,4 +88,14 @@ variable "cloudflare_endpoint_s3" {
   type        = string
   nullable    = false
   description = "Cloudflare R2 AWS S3 endpoint"
+}
+
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
+
+variable "cloudflare_api_token" {
+  type        = string
+  nullable    = false
+  description = "Cloudflare API token"
 }

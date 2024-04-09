@@ -59,3 +59,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "image" {
     }
   }
 }
+
+resource "cloudflare_r2_bucket" "this" {
+  account_id = "7e81a11f6d60d2ecf56d243bd0d77a37"
+  location   = "EEUR"
+  name       = "yourspot-dev"
+}
