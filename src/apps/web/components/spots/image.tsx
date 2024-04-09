@@ -1,5 +1,6 @@
 import Image from 'next/image'
 
+import { cn } from '@/utils'
 import { isMobileClient } from '@/utils/server'
 
 
@@ -31,7 +32,7 @@ export function SpotImage({
 
     return (
         <Image
-            className={className}
+            className={cn('inline rounded-xl shadow-md', className)}
             src={image}
             alt={`${title} image`}
             {...size}

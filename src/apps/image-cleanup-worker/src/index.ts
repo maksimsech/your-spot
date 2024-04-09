@@ -4,7 +4,6 @@ import {
     Credentials,
 } from 'realm-web'
 
-
 import type { Spot as SpotContract } from '@your-spot/contracts'
 
 

@@ -61,13 +61,14 @@ export async function SpotInfo({ spot, spotAuthor }: SpotInfoProps) {
             <h2 className='self-center'>
                 {spot.title}
             </h2>
-            {spot.image && (
-                <SpotImage
-                    className='self-center rounded-xl shadow-md'
-                    title={spot.title}
-                    image={spot.image}
-                />
-            )}
+            <div className='self-center'>
+                {spot.image && (
+                    <SpotImage
+                        title={spot.title}
+                        image={spot.image}
+                    />
+                )}
+            </div>
             <Separator />
             <div className='text-muted-foreground mx-6'>
                 {spot.description}
