@@ -3,8 +3,7 @@
 import { imageTypes } from '@your-spot/contracts'
 import {
     buckets,
-    getUploadUrl,
-    getImageFullUrl,
+    getUrlForImageUpload,
 } from '@your-spot/storage'
 
 import { ensureAuthenticated } from '@/auth/helper'
@@ -21,8 +20,8 @@ export async function getImageUploadDetails(originalFileName: string, mimeType: 
     const {
         putUrl,
         deleteUrl,
-    } = await getUploadUrl(buckets.image, image)
-    const imageUrl = getImageFullUrl(image)
+        imageUrl,
+    } = await getUrlForImageUpload(buckets.image, image)
     return {
         uploadUrl: putUrl,
         deleteUrl,

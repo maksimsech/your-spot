@@ -27,7 +27,7 @@ import {
 import { getSpotCacheTag } from '@/cache/spots'
 
 
-export async function createSpot(spot: Omit<Spot, 'id' | 'authorId'>) {
+export async function createSpot(spot: Omit<Parameters<typeof createSpotCore>[0], 'authorId'>) {
     const user = await ensureAuthenticated()
 
     const spotWithAuthorId = {
@@ -60,6 +60,8 @@ export async function deleteSpot(spotId: string) {
         return
     }
 
+    // TODO: Isn't really security because we trust authorId from our front.
+    // Technically everything might be there.
     if (!canDeleteSpot(spot, user)) {
         return
     }

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { deleteSpot } from '@/actions/spots'
+import { useMap } from '@/components/map'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,6 +32,7 @@ export function DeleteDialog({
     title,
 }: DeleteDialogProps) {
     const router = useRouter()
+    const map = useMap()
     const { toast } = useToast()
 
     const [deleting, setDeleting] = useState(false)
@@ -69,6 +71,7 @@ export function DeleteDialog({
                                 title: 'Spot deleted',
                                 description: `${title} successfully deleted!`,
                             })
+                            map?.refreshSpots()
                             router.push('/?action=refresh')
                         }}
                     >

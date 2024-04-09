@@ -9,4 +9,6 @@ export interface Spot {
     image?: string
     coordinate: Coordinate
     authorId: ObjectId | null
+    createdAt: Date
+    updatedAt?: Date
 }
