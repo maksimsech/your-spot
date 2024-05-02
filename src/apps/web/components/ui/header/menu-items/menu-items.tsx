@@ -21,9 +21,12 @@ import { ThemeModeToggle } from '../../theme-toggle'
 import { SpotSearch } from './spot-search'
 
 
-export function MenuItems() {
-    const [isOpen, setIsOpen] = useState(false)
+interface MenuItemsProps {
+    showSpotSearch?: boolean
+}
 
+export function MenuItems({ showSpotSearch }: MenuItemsProps) {
+    const [isOpen, setIsOpen] = useState(false)
 
     return (
         <Collapsible
@@ -39,7 +42,9 @@ export function MenuItems() {
                 )}
             </CollapsibleTrigger>
             <CollapsibleContent className='data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right flex gap-2'>
-                <SpotSearch />
+                {showSpotSearch && (
+                    <SpotSearch />
+                )}
                 <ThemeModeToggle />
                 <Link
                     className={cn(buttonVariants({ variant: 'outline'}), 'p-2')}

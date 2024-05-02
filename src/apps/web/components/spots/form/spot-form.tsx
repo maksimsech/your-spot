@@ -23,6 +23,7 @@ import { useSpotForm } from './use-spot-form'
 
 export interface SpotFormProps {
     spot?: Spot
+    showImageInput: boolean
     showDeleteButton?: boolean
     lat?: number
     lng?: number
@@ -31,6 +32,7 @@ export interface SpotFormProps {
 
 export function SpotForm({
     spot,
+    showImageInput,
     showDeleteButton = false,
     lat,
     lng,
@@ -42,6 +44,7 @@ export function SpotForm({
         handleSubmit,
         handleResetImage,
     } = useSpotForm({
+        showImageInput,
         spot,
         lat,
         lng,
@@ -103,12 +106,14 @@ export function SpotForm({
                             </FormItem>
                         )}
                     />
-                    <ImageInput
-                        loadingProgress={loadingProgress}
-                        disabled={isSubmitting}
-                        image={image}
-                        onReset={handleResetImage}
-                    />
+                    {showImageInput && (
+                        <ImageInput
+                            loadingProgress={loadingProgress}
+                            disabled={isSubmitting}
+                            image={image}
+                            onReset={handleResetImage}
+                        />
+                    )}
                     <Button
                         className='mt-3 w-full self-center'
                         type='submit'

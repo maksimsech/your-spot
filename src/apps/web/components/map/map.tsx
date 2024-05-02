@@ -37,12 +37,14 @@ export interface MapProps {
     setMapContext: (context: MapContext) => void
     className?: string
     children: ReactNode
+    canAddSpot: boolean
 }
 
 export function Map({
     setMapContext,
     className,
     children,
+    canAddSpot,
 } : MapProps) {
     const router = useRouter()
 
@@ -86,9 +88,10 @@ export function Map({
     )
 
     const onSpotClicked = useCallback(
-        (s: SpotCoordinates) => router.push(`/spots/${s.id}`),
-        [router],
+        (s: SpotCoordinates) => canAddSpot && router.push(`/spots/${s.id}`),
+        [router, canAddSpot],
     )
+
     const onSpotGroupClicked = useCallback(
         (s: SpotGroup) => {
             const searchParams = new URLSearchParams()
