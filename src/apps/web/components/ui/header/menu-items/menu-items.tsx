@@ -52,6 +52,7 @@ export function MenuItems({ showSpotSearch }: MenuItemsProps) {
                     target='_blank'
                 >
                     <GitHubLogoIcon />
+                    <span className='sr-only'>GitHub project</span>
                 </Link>
             </CollapsibleContent>
         </Collapsible>

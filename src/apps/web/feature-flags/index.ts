@@ -11,15 +11,17 @@ export function isFeatureEnabled(...args: Parameters<typeof isFeatureEnabledLib>
     const cachedIsFeatureEnabledLib = cache(
         isFeatureEnabledLib,
         ['feature-flags', cacheTag],
-        { tags: [cacheTag], revalidate },
+        { tags: [globalCacheTag, cacheTag], revalidate },
     )
 
     return cachedIsFeatureEnabledLib(...args)
 }
 
+export function getCacheTag(feature: AllFeatures) {
+    return `feature-flag-${feature}`
+}
+
+export const globalCacheTag = 'feature-flag'
 
 const revalidate = 24 * 60 // 24 hours
 
-function getCacheTag(feature: AllFeatures) {
-    return `feature-flag-${feature}`
-}

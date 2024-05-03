@@ -83,13 +83,13 @@ export function Map({
     )
 
     const onCoordinateClicked = useCallback(
-        ({ lat, lng }: Coordinate) => router.push(`/spots?lat=${lat}&lng=${lng}`),
-        [router],
+        ({ lat, lng }: Coordinate) => canAddSpot && router.push(`/spots?lat=${lat}&lng=${lng}`),
+        [router, canAddSpot],
     )
 
     const onSpotClicked = useCallback(
-        (s: SpotCoordinates) => canAddSpot && router.push(`/spots/${s.id}`),
-        [router, canAddSpot],
+        (s: SpotCoordinates) => router.push(`/spots/${s.id}`),
+        [router],
     )
 
     const onSpotGroupClicked = useCallback(

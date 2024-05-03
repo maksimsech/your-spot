@@ -36,7 +36,7 @@ export async function Header({ className }: HeaderProps) {
     return (
         <header className={cn('flex w-full flex-none items-center justify-between p-2 shadow-inner border-b dark:border-b-slate-300 border-b-slate-700', className)}>
             <span className='flex items-center gap-1'>
-                <Link href='/' className='font-bold'>
+                <Link href='/' className='py-2 font-bold'>
                     Your spot
                 </Link>
             </span>

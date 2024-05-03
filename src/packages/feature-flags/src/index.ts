@@ -1,18 +1,13 @@
 import { getValue } from './cloudflare-kv'
+import type { AllFeatures } from './names'
 
 
-export type SpotFeature =
-    | 'spot_add_image'
-    | 'spot_add'
-    | 'spot_search'
-
-export type UserFeature =
-    | 'user_sign_in'
-
-export type AllFeatures =
-    | SpotFeature
-    | UserFeature
-
+export {
+    type SpotFeature,
+    type UserFeature,
+    type AllFeatures,
+    isFeatureValid,
+} from './names'
 
 export async function isFeatureEnabled(feature: AllFeatures) {
     try {
