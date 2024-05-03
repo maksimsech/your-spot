@@ -23,5 +23,5 @@ export function getCacheTag(feature: AllFeatures) {
 
 export const globalCacheTag = 'feature-flag'
 
-const revalidate = 24 * 60 // 24 hours
 
+const revalidate = 24 * 60 // 24 hours
