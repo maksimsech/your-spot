@@ -2,14 +2,14 @@ import { SpotImage } from '../image'
 
 import {
     SpotForm,
-    type SpotFormProps,
+    type SpotFormProps as SpotFormPropsInternal,
 } from './spot-form'
 
 
-interface ImageContainerProps extends Omit<SpotFormProps, 'image'> {
+interface SpotFormProps extends Omit<SpotFormPropsInternal, 'image'> {
 }
 
-export function ImageContainer(props: ImageContainerProps) {
+export function ImageContainer(props: SpotFormProps) {
     const { spot } = props
 
     const imageTitle = spot?.image && spot?.title

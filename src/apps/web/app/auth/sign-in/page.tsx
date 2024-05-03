@@ -6,6 +6,7 @@ import { config } from '@your-spot/auth'
 import { getAuthenticatedUser } from '@/auth/helper'
 import { Logo } from '@/components/auth/logo'
 import { Separator } from '@/components/ui/separator'
+import { isFeatureEnabled } from '@/feature-flags'
 
 import { Button } from './_components/button'
 
@@ -37,6 +38,11 @@ interface PageProps {
 export default async function Page({
     searchParams,
 }: PageProps) {
+    const signInEnabled = await isFeatureEnabled('user_sign_in')
+    if (!signInEnabled) {
+        redirect('/')
+    }
+
     const user = await getAuthenticatedUser()
     if (user) {
         redirect('/')

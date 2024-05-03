@@ -28,12 +28,14 @@ import { formSchema } from './schema'
 
 
 interface UseSportFormParameters {
+    showImageInput: boolean
     spot?: Spot
     lat?: number
     lng?: number
 }
 
 export function useSpotForm({
+    showImageInput,
     spot,
     lat,
     lng,
@@ -60,14 +62,13 @@ export function useSpotForm({
         })
     }
 
-    // TODO: create job that weekly will check for image that are in cloudflare but not in db. (Or create better solution overall)
     async function handleEdit(
         values: z.infer<typeof formSchema>,
         editMethod: (imageUrl?: string) => Promise<void>,
         toastArgs: Toast,
     ) {
         const { image } = values
-        if (image && image instanceof File) {
+        if (showImageInput && image && image instanceof File) {
             const result = await uploadImage(image, setLoadingProgress)
 
             if (!result.success) {

@@ -24,6 +24,7 @@
         "@radix-ui/react-toast": "^1.1.5",
         "@your-spot/auth": "*",
         "@your-spot/core": "*",
+        "@your-spot/feature-flags": "*",
         "@your-spot/map": "*",
         "@your-spot/storage": "*",
         "class-variance-authority": "^0.7.0",

@@ -1,0 +1,7 @@
+{
+    "name": "@your-spot/feature-flags",
+    "author": "Maksim Sech",
+    "exports": {
+        ".": "./src/index.ts"
+    }
+}

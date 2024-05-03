@@ -1,5 +1,7 @@
 import { cache } from 'react'
 
+import { redirect } from 'next/navigation'
+
 import type {
     Account,
     Provider,
@@ -43,9 +45,13 @@ export const getAuthenticatedUser = cache(async () => {
     return session?.user
 })
 
-export async function ensureAuthenticated() {
+export async function ensureAuthenticated(shouldRedirect?: boolean) {
     const user = await getAuthenticatedUser()
     if (!user) {
+        if (shouldRedirect) {
+            redirect('/')
+        }
+
         // TODO: Custom exception?
         throw new Error('Unauthorized')
     }

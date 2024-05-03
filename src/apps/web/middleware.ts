@@ -6,7 +6,7 @@ import {
 import {
     auth,
     validateRoute,
-} from './auth/middelware'
+} from './auth/middleware'
 
 
 const ignoredAuthPages = [

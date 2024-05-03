@@ -27,7 +27,8 @@ export default async function Page({
     }
 
     // TODO: Revisit with newer versions
-    const cachedGetSpot = cache(getSpot, ['get-spot'], { tags: [getSpotCacheTag(id)] })
+    const cacheTag = getSpotCacheTag(id)
+    const cachedGetSpot = cache(getSpot, ['get-spot', cacheTag], { tags: [cacheTag] })
     const spot = await cachedGetSpot(id)
     if (!spot) {
         notFound()

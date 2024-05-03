@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { redirect } from 'next/navigation'
 
+import { getAuthenticatedUser } from '@/auth/helper'
 import { CurrentBoundsProvider } from '@/components/map'
 import { ThemeProvider } from '@/components/providers/theme'
 import { Toaster } from '@/components/ui/toast'
+import { isFeatureEnabled } from '@/feature-flags'
 import type { LayoutProps } from '@/types/layout-props'
 
 import './globals.css'
@@ -16,7 +19,15 @@ export const metadata: Metadata = {
     description: 'Find and mark your favorite spots!',
 }
 
-export default function RootLayout({ children }: LayoutProps) {
+export default async function RootLayout({ children }: LayoutProps) {
+    const signInEnabled = await isFeatureEnabled('user_sign_in')
+    if (!signInEnabled) {
+        const user = await getAuthenticatedUser()
+        if (user) {
+            redirect('/auth/sign-out')
+        }
+    }
+
     return (
         <html
             lang='en'

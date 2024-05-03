@@ -11,6 +11,7 @@ import {
     canEditSpot,
 } from '@/auth/rules/spots'
 import { SpotForm } from '@/components/spots/form'
+import { isFeatureEnabled } from '@/feature-flags'
 
 
 interface PageProps {
@@ -37,10 +38,13 @@ export default async function Page({
 
     const showDeleteButton = canDeleteSpot(spot, user)
 
+    const spotAddImageEnabled = await isFeatureEnabled('spot_add_image')
+
     return (
         <SpotForm
-            spot={spot}
+            showImageInput={spotAddImageEnabled}
             showDeleteButton={showDeleteButton}
+            spot={spot}
         />
     )
 }
