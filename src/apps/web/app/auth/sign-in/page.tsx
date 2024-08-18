@@ -69,7 +69,7 @@ export default async function Page({
                         >
                             <Logo
                                 logo={p?.style?.logo}
-                                logoDark={p?.style?.logoDark}
+                                logoDark={p?.style?.logo}
                             />
                         </Button>
                     ))}

@@ -1,10 +1,8 @@
-import type {
-    User,
-    DefaultSession,
-} from '@auth/core/types'
+import type { User } from '@auth/core/types'
 
 
 export interface AuthUser extends User {
+    id: string
 }
 
 declare module '@auth/core/types' {

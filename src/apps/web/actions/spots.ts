@@ -41,9 +41,12 @@ export async function createSpot(spot: Omit<Parameters<typeof createSpotCore>[0]
 export async function updateSpot(spot: Parameters<typeof updateSpotCore>[0] & Pick<Spot, 'authorId'>) {
     const user = await ensureAuthenticated()
 
-    // TODO: Isn't really security because we trust authorId from our front.
-    // Technically everything might be there.
-    if (!canEditSpot(spot, user)) {
+    const existingSpot = await getSpotCore(spot.id)
+    if (existingSpot === null) {
+        return
+    }
+
+    if (!canEditSpot(existingSpot, user)) {
         return
     }
 
@@ -60,8 +63,6 @@ export async function deleteSpot(spotId: string) {
         return
     }
 
-    // TODO: Isn't really security because we trust authorId from our front.
-    // Technically everything might be there.
     if (!canDeleteSpot(spot, user)) {
         return
     }
