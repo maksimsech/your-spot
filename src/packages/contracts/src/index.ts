@@ -21,11 +21,9 @@ export interface Spot {
     updatedAt?: Date
 }
 
-export interface SpotCoordinates extends Pick<Spot, 'id' | 'coordinate'> {
-}
+export type SpotCoordinates = Pick<Spot, 'id' | 'coordinate'>
 
-export interface SpotDescription extends Pick<Spot, 'id' | 'coordinate' | 'title'> {
-}
+export type SpotDescription = Pick<Spot, 'id' | 'coordinate' | 'title'>
 
 export interface SpotLikeInformation {
     likedByUser: boolean
