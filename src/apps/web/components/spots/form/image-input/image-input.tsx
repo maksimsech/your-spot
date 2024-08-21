@@ -43,8 +43,8 @@ export function ImageInput({
                     className='w-full'
                     variant='outline'
                     onClick={(e) => {
-                        e.preventDefault && e.preventDefault()
-                        e.persist && e.persist()
+                        e.preventDefault?.()
+                        e.persist?.()
 
                         onEdit()
                     }}
@@ -71,13 +71,13 @@ export function ImageInput({
                     className='w-full'
                     variant='outline'
                     onClick={(e) => {
-                        e.preventDefault && e.preventDefault()
-                        e.persist && e.persist()
+                        e.preventDefault?.()
+                        e.persist?.()
 
                         onReset()
                     }}
                 >
-                Reset
+                    Reset
                 </Button>
             )}
             <Progress value={loadingProgress} />

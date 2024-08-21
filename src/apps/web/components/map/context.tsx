@@ -30,9 +30,7 @@ export function useMap() {
 // In reality this component should be called MapProvider, but for type clarity
 // and to not introduce additional component to hide provider lets rename this to hide.
 // It might be fixed with HOC in someway but nah..
-interface MapProps extends Omit<InnerMapProps, 'setMapContext'> {
-
-}
+type MapProps = Omit<InnerMapProps, 'setMapContext'>
 
 export function Map(props: MapProps) {
     const [mapContext, setMapContext] = useState<MapContext | null>(null)

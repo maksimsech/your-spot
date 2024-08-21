@@ -47,8 +47,7 @@ export function useMutableCurrentBounds() {
     return currentBoundsContext
 }
 
-interface CurrentBoundsProviderProps extends PropsWithChildren {
-}
+type CurrentBoundsProviderProps = PropsWithChildren
 
 export function CurrentBoundsProvider({ children }: CurrentBoundsProviderProps) {
     const [currentBounds, setCurrentBoundsState] = useState<Bounds | null>(null)

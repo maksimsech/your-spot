@@ -47,7 +47,7 @@ export async function uploadImage(image: File, onImageUploading: (percent: numbe
             }
         }
     }
-    catch (e: unknown) {
+    catch {
         return {
             success: false,
             deleteUrl,

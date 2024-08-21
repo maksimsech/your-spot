@@ -42,9 +42,13 @@ export function FormContainer({
                             name={field.name}
                             loadingProgress={loadingProgress}
                             image={image}
-                            onFilesChange={files =>
-                                field.onChange(files.at(0))
-                            }
+                            onFilesChange={files => {
+                                if (files.length > 1) {
+                                    field.onChange(files)
+                                } else {
+                                    field.onChange(files.at(0))
+                                }
+                            }}
                             onEdit={() => field.onChange(null)}
                             onReset={onReset}
                         />
