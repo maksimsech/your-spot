@@ -34,12 +34,12 @@ jobs:
               run: npm ci
             - name: Run tsc in packages
               run: |
-                for package in $(ls -d ./src/packages/*); do
+                for package in $(ls -d ./packages/*); do
                     tsc --build --noEmit "$package"
                 done
                 - name: Run tsc in packages
                 run: |
-                  for package in $(ls -d ./src/apps/*); do
+                  for package in $(ls -d ./apps/*); do
                       tsc --build --noEmit "$package"
                   done
             - name: Run ESLint
