@@ -38,8 +38,9 @@ export async function LinkedAccounts({ id }: LinkedAccountsProps) {
                         target='_blank'
                     >
                         <Logo
+                            // TODO: Refactor
                             logo={providerConfig.style?.logo}
-                            logoDark={providerConfig.style?.logoDark}
+                            logoDark={providerConfig.style?.logo}
                         />
                         <span>
                             {providerConfig.name}

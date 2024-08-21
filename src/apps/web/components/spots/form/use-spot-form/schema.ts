@@ -24,9 +24,10 @@ export const formSchema = z.object({
     image: z
         .union([
             z.instanceof(File)
-                .refine(f => (f.length ?? 1) === 1, 'Only one file is allowed.')
                 .refine(f => f.size < maxFileSize, `Maximum file size is ${maxFileSizeInMb} MB.`)
                 .refine(f => allowedFileTypes.includes(f.type), 'Allowed image formats are jpeg, png'),
+            z.array(z.instanceof(File))
+                .refine(f => (f.length ?? 1) === 1, 'Only one file is allowed.'),
             z.string(),
             z.null(),
         ]),

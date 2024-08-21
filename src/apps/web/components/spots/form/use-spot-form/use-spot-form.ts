@@ -88,7 +88,7 @@ export function useSpotForm({
             try {
                 await editMethod(imageUrl)
             }
-            catch (e: unknown) {
+            catch {
                 showErrorToast()
                 await deleteImage(deleteUrl)
                 return false

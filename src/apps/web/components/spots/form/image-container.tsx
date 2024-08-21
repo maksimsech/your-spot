@@ -6,8 +6,7 @@ import {
 } from './spot-form'
 
 
-interface SpotFormProps extends Omit<SpotFormPropsInternal, 'image'> {
-}
+type SpotFormProps = Omit<SpotFormPropsInternal, 'image'>
 
 export function ImageContainer(props: SpotFormProps) {
     const { spot } = props

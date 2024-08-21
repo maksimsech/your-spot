@@ -19,6 +19,7 @@ import { Button } from './button'
 interface DropzoneProps extends InputHTMLAttributes<HTMLInputElement> {
     onFilesChange: (files: Array<File>) => void
     maxFileSizeInMb?: number
+    maxFiles?: number
     acceptedTypes: Record<string, ReadonlyArray<string>>
 }
 
@@ -35,6 +36,7 @@ export function Dropzone({
     onBlur,
     maxFileSizeInMb,
     acceptedTypes,
+    maxFiles,
     ...restProps
 }: DropzoneProps) {
     const [toUpload, setToUpload] = useState<ReadonlyArray<ListFile>>([])
@@ -52,7 +54,7 @@ export function Dropzone({
     } = useDropzone({
         disabled,
         accept: acceptedTypes as Accept,
-        maxFiles: 1,
+        maxFiles,
         onDrop,
     })
 
