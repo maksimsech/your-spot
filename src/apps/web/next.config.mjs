@@ -12,6 +12,9 @@ const nextConfig = {
     experimental: {
         serverComponentsExternalPackages: [
             '@turf/turf',
+            '@smithy/util-retry',
+            'uuid',
+            '@smithy/middleware-retry',
         ],
     },
     eslint: {
