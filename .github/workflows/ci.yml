@@ -35,12 +35,12 @@ jobs:
             - name: Run tsc in packages
               run: |
                 for package in $(ls -d ./packages/*); do
-                    tsc --build --noEmit "$package"
+                    npx tsc --noEmit --project "$package/tsconfig.json"
                 done
                 - name: Run tsc in packages
                 run: |
                   for package in $(ls -d ./apps/*); do
-                      tsc --build --noEmit "$package"
+                    npx tsc --noEmit --project "$package/tsconfig.json"
                   done
             - name: Run ESLint
               run: npx eslint --quiet .
