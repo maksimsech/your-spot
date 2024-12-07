@@ -46,7 +46,8 @@ public struct Spot: Codable, Identifiable {
     public let coordinate: Coordinate
 }
 
-public struct SpotGroup: Codable {
+public struct SpotGroup: Codable, Identifiable {
+    public var id: String { spotIds.first! } // TODO: some cleaner typings, but I really believe my API :)
     public let spotIds: [String]
     public let coordinate: Coordinate
 }
