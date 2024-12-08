@@ -2,18 +2,21 @@ import MapKit
 import SwiftUI
 import os.log
 
-enum SelectedSpot: Identifiable {
+enum SelectedItem: Identifiable {
     public var id: String {
         switch self {
         case .spot(let spot):
             return spot.id
         case .spotGroup(let spotGroup):
             return spotGroup.id
+        case .coordinate(let coordinate):
+            return "\(coordinate.lat),\(coordinate.lng)"
         }
     }
 
     case spot(Spot)
     case spotGroup(SpotGroup)
+    case coordinate(Coordinate)
 }
 
 class MapViewModel: ObservableObject {
@@ -24,10 +27,8 @@ class MapViewModel: ObservableObject {
     )
     @Published var spots: [Spot] = []
     @Published var spotGroups: [SpotGroup] = []
-    @Published var selectedSpot: SelectedSpot?
-    var showingSpotDetails: Bool {
-        get { selectedSpot != nil }
-    }
+    @Published var selectedItem: SelectedItem?
+    @Published var selectedCoordinate: Coordinate?
 
     private var debounceWorkItem: DispatchWorkItem?
     private let debounceInterval: TimeInterval = 0.5
@@ -61,7 +62,7 @@ class MapViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval, execute: workItem)
     }
 
-    func getBounds(from region: MKCoordinateRegion) -> Bounds {
+    private func getBounds(from region: MKCoordinateRegion) -> Bounds {
         let center = region.center
         let latDelta = region.span.latitudeDelta / 2
         let lonDelta = region.span.longitudeDelta / 2
@@ -96,37 +97,64 @@ struct MapView: View {
     @StateObject private var viewModel = MapViewModel()
 
     var body: some View {
-        Map(position: $viewModel.position) {
-            ForEach(viewModel.spots, id: \.id) { spot in
-                Annotation("", coordinate: CLLocationCoordinate2D(latitude: spot.coordinate.lat, longitude: spot.coordinate.lng)) {
-                    Image(systemName: "mappin.circle.fill")
-                        .foregroundColor(.accentColor)
-                        .font(.title)
-                        .onTapGesture {
-                            viewModel.selectedSpot = .spot(spot)
-                        }
+        MapReader { reader in
+            Map(position: $viewModel.position) {
+                ForEach(viewModel.spots, id: \.id) { spot in
+                    Annotation("", coordinate: CLLocationCoordinate2D(latitude: spot.coordinate.lat, longitude: spot.coordinate.lng)) {
+                        Image(systemName: "mappin.circle.fill")
+                            .foregroundColor(.accentColor)
+                            .font(.title)
+                            .onTapGesture {
+                                viewModel.selectedItem = .spot(spot)
+                            }
+                    }
+                }
+                ForEach(viewModel.spotGroups, id: \.id) { spotGroup in
+                    Annotation("", coordinate: CLLocationCoordinate2D(latitude: spotGroup.coordinate.lat, longitude: spotGroup.coordinate.lng)) {
+                        Image(systemName: "mappin.circle.fill")
+                            .foregroundColor(.secondary)
+                            .font(.title)
+                            .onTapGesture {
+                                viewModel.selectedItem = .spotGroup(spotGroup)
+                            }
+                    }
                 }
             }
-            ForEach(viewModel.spotGroups, id: \.id) { spotGroup in
-                Annotation("", coordinate: CLLocationCoordinate2D(latitude: spotGroup.coordinate.lat, longitude: spotGroup.coordinate.lng)) {
-                    Image(systemName: "mappin.circle.fill")
-                        .foregroundColor(.secondary)
-                        .font(.title)
-                        .onTapGesture {
-                            viewModel.selectedSpot = .spotGroup(spotGroup)
-                        }
+            .safeAreaInset(edge: .bottom) {
+                if let selectedCoordinate = viewModel.selectedCoordinate {
+                    Button(action: {
+                        viewModel.selectedItem = .coordinate(selectedCoordinate)
+                        viewModel.selectedCoordinate = nil
+                    }) {
+                        Text("Add Spot")
+                    }
                 }
             }
-        }
-        .onMapCameraChange { context in
-            viewModel.handleMapCameraChange(region: context.region)
-        }
-        .sheet(item: $viewModel.selectedSpot) { spot in
-            switch spot {
-            case .spot(let spot):
-                SpotDetails(spot: spot)
-            case .spotGroup(let spotGroup):
-                SpotGroupDetails(spotGroup: spotGroup)
+            .onTapGesture { screenCoordinate in
+                if viewModel.selectedCoordinate != nil {
+                    viewModel.selectedCoordinate = nil
+                    return
+                }
+
+                let pl = reader.convert(screenCoordinate, from: .local)
+                guard let pl = pl else { return }
+                viewModel.selectedCoordinate = .init(
+                    lat: pl.latitude,
+                    lng: pl.longitude
+                )
+            }
+            .onMapCameraChange { context in
+                viewModel.handleMapCameraChange(region: context.region)
+            }
+            .sheet(item: $viewModel.selectedItem) { item in
+                switch item {
+                case .spot(let spot):
+                    SpotDetails(spot: spot)
+                case .spotGroup(let spotGroup):
+                    SpotGroupDetails(spotGroup: spotGroup)
+                case .coordinate(let coordinate):
+                    NewSpot(coordinate: coordinate)
+                }
             }
         }
     }
